@@ -12,36 +12,33 @@ public class LocalDatabase {
 
     static {
         Student s1 = new Student(109787, "Pawel", "Kusz", new Date(93, 10, 17), new ArrayList<Grade>());
-        Student s2 = new Student(119787, "Piotr", "Kusz", new Date(93, 10, 17), new ArrayList<Grade>());
+        Student s2 = new Student(117123, "Piotr", "Kusz", new Date(93, 10, 17), new ArrayList<Grade>());
+        Student s3 = new Student(123456, "Romek", "Kaczynski", new Date(65, 9, 23), new ArrayList<Grade>());
+        Student s4 = new Student(100000, "Jarek", "Giertych", new Date(45, 10, 1), new ArrayList<Grade>());
+
+        Course c1 = new Course (1,"Technologie Programistyczne - Systemy internetowe", "Tomasz Pawlak");
+        Course c2 = new Course (2,"Biznesowe Systemy Rozproszone", "Tomasz Pawlak");
+
+
+        s1.getGrades().add(new Grade(1, 2.0f, new Date(), c1));
+        s1.getGrades().add(new Grade(2, 3.5f, new Date(), c1));
+        s1.getGrades().add(new Grade(3, 3.5f, new Date(), c2));
+
+        s2.getGrades().add(new Grade(4, 5.0f, new Date(), c2));
+        s2.getGrades().add(new Grade(5, 5.0f, new Date(), c1));
+
+        s3.getGrades().add(new Grade(6, 2.0f, new Date(), c2));
+        s3.getGrades().add(new Grade(7, 2.0f, new Date(), c2));
+
         StudentDB.put(109787, s1);
-        StudentDB.put(119787, s2);
+        StudentDB.put(117123, s2);
+        StudentDB.put(123456, s3);
+        StudentDB.put(100000, s4);
 
-            Student s3 = new Student(123456, "Romek", "Kaczynski", new Date(65, 9, 23), new ArrayList<Grade>());
-            Student s4 = new Student(100000, "Jarek", "Giertych", new Date(45, 10, 1), new ArrayList<Grade>());
+        CourseDB.put(1, c1);
+        CourseDB.put(2, c2);
 
-            Course c1 = new Course (1,"Technologie Programistyczne - Systemy internetowe", "Tomasz Pawlak");
-            Course c2 = new Course (2,"Biznesowe Systemy Rozproszone", "Tomasz Pawlak");
-
-
-            s1.getGrades().add(new Grade(1, 2.0f, new Date(), c1));
-            s1.getGrades().add(new Grade(2, 3.5f, new Date(), c1));
-            s1.getGrades().add(new Grade(3, 3.5f, new Date(), c2));
-
-            s2.getGrades().add(new Grade(4, 5.0f, new Date(), c2));
-            s2.getGrades().add(new Grade(5, 5.0f, new Date(), c1));
-
-            s3.getGrades().add(new Grade(6, 2.0f, new Date(), c2));
-            s3.getGrades().add(new Grade(7, 2.0f, new Date(), c2));
-
-            StudentDB.put(109787, s1);
-            StudentDB.put(117123, s2);
-            StudentDB.put(123456, s3);
-            StudentDB.put(100000, s4);
-
-            CourseDB.put(1, c1);
-            CourseDB.put(2, c2);
-
-            System.out.println("Local database initialized");
+        System.out.println("Local database initialized");
     }
 
     public static LocalDatabase getInstance() {
