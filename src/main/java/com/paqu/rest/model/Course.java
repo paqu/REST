@@ -2,7 +2,7 @@ package com.paqu.rest.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="Course")
+@XmlRootElement(name="course")
 public class Course {
     private int id;
     private String name;
@@ -31,5 +31,14 @@ public class Course {
     }
     public void setLecturer(String lecturer) {
         this.lecturer = lecturer;
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lecturer='" + lecturer + '\'' +
+                '}';
     }
 }

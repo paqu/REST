@@ -60,5 +60,15 @@ public class Student {
         this.grades = grades;
     }
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "index=" + index +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthday=" + birthday +
+                ", grades=" + grades +
+                '}';
+    }
 }
 
