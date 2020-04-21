@@ -18,7 +18,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 
-@Path("/updates")
+@Path("/courses")
 public class CourseResource {
 
     // local database for students
@@ -28,25 +28,25 @@ public class CourseResource {
 
     @POST
     @Consumes("application/xml")
-    public Response createCourse(Course update) {
-        if ((update.getName() != null && update.getName().equals(""))
-                || (update.getLecturer() != null && update.getLecturer().equals(""))
-                || update.getName()  == null || update.getLecturer() == null
+    public Response createCourse(Course course) {
+        if ((course.getName() != null && course.getName().equals(""))
+                || (course.getLecturer() != null && course.getLecturer().equals(""))
+                || course.getName()  == null || course.getLecturer() == null
         ) {
             return Response.status(400).build();
         }
-        update.setId(idCounter.incrementAndGet());
-        CourseDB.put(update.getId(), update);
-        return Response.created(URI.create("/updates/" + update.getId())).build();
+        course.setId(idCounter.incrementAndGet());
+        CourseDB.put(course.getId(), course);
+        return Response.created(URI.create("/courses/" + course.getId())).build();
     }
 
     @GET
     @Path("{id}")
     @Produces("application/xml")
     public Course getCourse(@PathParam("id") int id) {
-        Course update = CourseDB.get(id);
-        if (update == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
-        return update;
+        Course course = CourseDB.get(id);
+        if (course == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
+        return course;
     }
 
     @PUT
@@ -78,7 +78,7 @@ public class CourseResource {
     @GET
     @Produces({ "application/xml"})
     public Collection<Course> getCourses() {
-        List<Course> updateList = new ArrayList<Course>(CourseDB.values());
-        return updateList;
+        List<Course> courseList = new ArrayList<Course>(CourseDB.values());
+        return courseList;
     }
 }
