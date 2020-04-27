@@ -73,6 +73,7 @@ public class CourseResource {
     public void deleteCourse(@PathParam("id") int id) {
         Course current = CourseDB.remove(id);
         if (current == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
+        LocalDatabase.getInstance().removeGradesWithCourseId(id);
     }
 
     @GET

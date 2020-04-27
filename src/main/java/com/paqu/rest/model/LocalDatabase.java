@@ -2,6 +2,7 @@ package com.paqu.rest.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -50,5 +51,15 @@ public class LocalDatabase {
     }
     public Map<Integer, Course> getCourses() {
         return this.CourseDB;
+    }
+
+    synchronized public void removeGradesWithCourseId(int courseID) {
+        for (var student : StudentDB.values()) {
+            for (Iterator<Grade> it = student.getGrades().iterator(); it.hasNext();) {
+                Grade grade = it.next();
+                if (grade.getCourse().getId() == courseID)
+                    it.remove();
+            }
+        }
     }
 }
