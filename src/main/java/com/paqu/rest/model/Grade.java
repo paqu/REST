@@ -3,7 +3,7 @@ package com.paqu.rest.model;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
-@XmlRootElement(name="Grade")
+@XmlRootElement(name="grade")
 public class Grade {
     private int id;
     private double value;
@@ -29,4 +29,14 @@ public class Grade {
 
     public Date getDate() { return this.date; }
     public void setDate(Date date) { this.date = date; }
+
+    @Override
+    public String toString() {
+        return "Grade{" +
+                "id=" + id +
+                ", value=" + value +
+                ", date=" + date +
+                ", course=" + course +
+                '}';
+    }
 }
