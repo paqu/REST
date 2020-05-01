@@ -1,5 +1,7 @@
 package com.paqu.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
@@ -7,6 +9,8 @@ import java.util.Date;
 public class Grade {
     private int id;
     private double value;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Europe/Warsaw")
     private Date date;
     private Course course;
 

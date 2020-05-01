@@ -27,7 +27,7 @@ public class StudentResource {
     static private AtomicInteger idCounter = new AtomicInteger(117787);
 
     @POST
-    @Consumes("application/xml")
+    @Consumes({"application/xml", "application/json"})
     public Response createStudent(Student student) {
         if ((student.getLastName() != null && student.getLastName().equals(""))
                 || (student.getFirstName() != null && student.getFirstName().equals(""))
@@ -42,7 +42,7 @@ public class StudentResource {
 
     @GET
     @Path("{id}")
-    @Produces("application/xml")
+    @Produces({"application/xml", "application/json"})
     public Student getStudent(@PathParam("id") int id) {
         Student student = StudentDB.get(id);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -51,7 +51,7 @@ public class StudentResource {
 
     @PUT
     @Path("{id}")
-    @Consumes("application/xml")
+    @Consumes({"application/xml", "application/json"})
     public Response updateStudent(@PathParam("id") int id, Student update)  {
         if ((update.getLastName() != null && update.getLastName().equals(""))
                 || (update.getFirstName() != null && update.getFirstName().equals(""))
@@ -77,7 +77,7 @@ public class StudentResource {
     }
 
     @GET
-    @Produces({ "application/xml"})
+    @Produces({"application/xml", "application/json"})
     public Collection<Student> getStudents() {
         List<Student> studentList = new ArrayList<Student>(StudentDB.values());
         return studentList;

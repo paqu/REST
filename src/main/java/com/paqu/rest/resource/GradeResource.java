@@ -30,7 +30,7 @@ public class GradeResource {
     static private AtomicInteger idCounter = new AtomicInteger(7);
 
     @POST
-    @Consumes("application/xml")
+    @Consumes({"application/xml", "application/json"})
     public Response createGrade(@PathParam("index") int index, Grade grade) {
         Student student = StudentDB.get(index);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -56,7 +56,7 @@ public class GradeResource {
 
     @GET
     @Path("{id}")
-    @Produces("application/xml")
+    @Produces({"application/xml", "application/json"})
     public Grade getGrade(@PathParam("index") int index, @PathParam("id") int id) {
         Grade grade = null;
         Student student = StudentDB.get(index);
@@ -74,7 +74,7 @@ public class GradeResource {
 
     @PUT
     @Path("{id}")
-    @Consumes("application/xml")
+    @Consumes({"application/xml", "application/json"})
     public Response updateGrade(@PathParam("index") int index, @PathParam("id") int id, Grade update)  {
 
         Student student = StudentDB.get(index);
@@ -127,7 +127,7 @@ public class GradeResource {
     }
 
     @GET
-    @Produces({ "application/xml"})
+    @Produces({ "application/xml", "application/json"})
     public Collection<Grade> getStudents(@PathParam("index") int index) {
         Student student = StudentDB.get(index);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);

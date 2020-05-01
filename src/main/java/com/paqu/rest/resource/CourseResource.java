@@ -27,7 +27,7 @@ public class CourseResource {
     static private AtomicInteger idCounter = new AtomicInteger(2);
 
     @POST
-    @Consumes("application/xml")
+    @Consumes({"application/xml", "application/json"})
     public Response createCourse(Course course) {
         if ((course.getName() != null && course.getName().equals(""))
                 || (course.getLecturer() != null && course.getLecturer().equals(""))
@@ -42,7 +42,7 @@ public class CourseResource {
 
     @GET
     @Path("{id}")
-    @Produces("application/xml")
+    @Produces({"application/xml", "application/json"})
     public Course getCourse(@PathParam("id") int id) {
         Course course = CourseDB.get(id);
         if (course == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -51,7 +51,7 @@ public class CourseResource {
 
     @PUT
     @Path("{id}")
-    @Consumes("application/xml")
+    @Consumes({"application/xml", "application/json"})
     public Response updateCourse(@PathParam("id") int id, Course update)  {
         if ((update.getName() != null && update.getName().equals(""))
                 || (update.getLecturer() != null && update.getLecturer().equals(""))
@@ -77,7 +77,7 @@ public class CourseResource {
     }
 
     @GET
-    @Produces({ "application/xml"})
+    @Produces({ "application/xml", "application/json"})
     public Collection<Course> getCourses() {
         List<Course> courseList = new ArrayList<Course>(CourseDB.values());
         return courseList;

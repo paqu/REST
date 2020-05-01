@@ -1,17 +1,27 @@
 package com.paqu.rest.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
+
+import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @XmlRootElement(name="student")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Student {
 
+
     private int index;
     private String firstName;
     private String lastName;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Europe/Warsaw")
     private Date birthday;
     @XmlTransient
     private ArrayList<Grade> grades;
