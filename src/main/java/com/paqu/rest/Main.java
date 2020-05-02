@@ -3,6 +3,8 @@ package com.paqu.rest;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,6 +17,7 @@ public class Main {
 
         // JAX-RS resources and providers
         final ResourceConfig rc = new ResourceConfig().packages("com.paqu.rest");
+        rc.register(DeclarativeLinkingFeature.class);
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
