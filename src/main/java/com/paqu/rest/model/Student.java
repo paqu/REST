@@ -2,6 +2,8 @@ package com.paqu.rest.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.paqu.rest.resource.GradeResource;
+import com.paqu.rest.resource.StudentResource;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
@@ -80,5 +82,15 @@ public class Student {
                 ", grades=" + grades +
                 '}';
     }
+
+    @InjectLinks({
+            @InjectLink(value = "/students/{index}", rel = "self"),
+            @InjectLink(value = "/students/", rel = "parent"),
+            @InjectLink(value = "/students/{index}/grades", rel = "grades")
+    })
+    @XmlElement(name="link")
+    @XmlElementWrapper(name = "links")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    List<Link> links;
 }
 

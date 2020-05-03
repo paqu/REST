@@ -1,6 +1,15 @@
 package com.paqu.rest.model;
 
+import com.paqu.rest.resource.CourseResource;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
+
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.List;
 
 @XmlRootElement(name="course")
 public class Course {
@@ -15,6 +24,8 @@ public class Course {
         this.name = name;
         this.lecturer = lecturer;
     }
+
+
 
     public int getId() { return this.id; }
     public void setId(int id) { this.id = id; }
@@ -41,4 +52,15 @@ public class Course {
                 ", lecturer='" + lecturer + '\'' +
                 '}';
     }
+
+    @InjectLinks({
+            @InjectLink(resource = CourseResource.class, method="getCourse", rel = "self"),
+            @InjectLink(resource = CourseResource.class, rel = "parent"),
+
+    })
+    @XmlElement(name="link")
+    @XmlElementWrapper(name = "links")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    List<Link> links;
+
 }
