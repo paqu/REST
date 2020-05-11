@@ -24,7 +24,6 @@ import javax.ws.rs.core.Response;
 public class GradeResource {
 
     // local database for students
-    static private final Map<Integer, Student> StudentDB = LocalDatabase.getInstance().getStudents();
     static private final Map<Integer, Course>  CourseDB  = LocalDatabase.getInstance().getCourses();
 
     static private AtomicInteger idCounter = new AtomicInteger(7);
@@ -32,7 +31,7 @@ public class GradeResource {
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response createGrade(@PathParam("index") int index, Grade grade) {
-        Student student = StudentDB.get(index);
+        Student student = LocalDatabase.getInstance().getStudent(index);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
 
         if (grade.getDate() == null
@@ -50,7 +49,7 @@ public class GradeResource {
         grade.setId(idCounter.incrementAndGet());
         grade.setCourse(course);
         student.getGrades().add(grade);
-        StudentDB.put(index, student);
+        LocalDatabase.getInstance().updateStudent(index, student);
         return Response.created(URI.create("/students/" + student.getIndex() + "/grades/" + grade.getId())).build();
     }
 
@@ -59,7 +58,7 @@ public class GradeResource {
     @Produces({"application/xml", "application/json"})
     public Grade getGrade(@PathParam("index") int index, @PathParam("id") int id) {
         Grade grade = null;
-        Student student = StudentDB.get(index);
+        Student student = LocalDatabase.getInstance().getStudent(index);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
 
         for (var g : student.getGrades()){
@@ -77,7 +76,7 @@ public class GradeResource {
     @Consumes({"application/xml", "application/json"})
     public Response updateGrade(@PathParam("index") int index, @PathParam("id") int id, Grade update)  {
 
-        Student student = StudentDB.get(index);
+        Student student = LocalDatabase.getInstance().getStudent(index);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
 
         Grade grade = null;
@@ -104,7 +103,7 @@ public class GradeResource {
         grade.setDate(update.getDate());
         grade.setCourse(course);
 
-        StudentDB.put(index, student);
+        LocalDatabase.getInstance().updateStudent(index, student);
         return Response.status(204).build();
     }
 
@@ -112,7 +111,7 @@ public class GradeResource {
     @Path("{id}")
     public void deleteGrade(@PathParam("index") int index, @PathParam("id") int id) {
         Grade grade = null;
-        Student student = StudentDB.get(index);
+        Student student = LocalDatabase.getInstance().getStudent(index);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
 
         for (var g : student.getGrades()){
@@ -123,13 +122,13 @@ public class GradeResource {
 
         if (grade == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
         student.getGrades().remove(grade);
-        StudentDB.put(index, student);
+        LocalDatabase.getInstance().updateStudent(index, student);
     }
 
     @GET
     @Produces({ "application/xml", "application/json"})
     public Collection<Grade> getStudents(@PathParam("index") int index) {
-        Student student = StudentDB.get(index);
+        Student student = LocalDatabase.getInstance().getStudent(index);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
 
         List<Grade> gradeList = new ArrayList<Grade>(student.getGrades());
