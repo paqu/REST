@@ -94,6 +94,11 @@ public class LocalDatabase {
         return courseId;
     }
 
+    public Course getCourse(int courseId)
+    {
+        return CourseDB.get(courseId);
+    }
+
     public Map<Integer, Course> getCourses() {
         return this.CourseDB;
     }

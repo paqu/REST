@@ -45,7 +45,7 @@ public class CourseResource {
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
     public Course getCourse(@PathParam("id") int id) {
-        Course course = CourseDB.get(id);
+        Course course = LocalDatabase.getInstance().getCourse(id);
         if (course == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
         return course;
     }
