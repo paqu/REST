@@ -104,6 +104,18 @@ public class LocalDatabase {
         return CourseDB.get(courseId);
     }
 
+    public Course updateCourse(int courseId, Course update)
+    {
+        Course current = CourseDB.get(courseId);
+        if (current == null) return null;
+        current.setName(update.getName());
+        current.setLecturer(update.getLecturer());
+
+        CourseDB.put(current.getId(), current);
+
+        return current;
+    }
+
     public Map<Integer, Course> getCourses() {
         return this.CourseDB;
     }

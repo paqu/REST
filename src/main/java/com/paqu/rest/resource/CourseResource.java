@@ -54,6 +54,7 @@ public class CourseResource {
     @Path("{id}")
     @Consumes({"application/xml", "application/json"})
     public Response updateCourse(@PathParam("id") int id, Course update)  {
+
         if ((update.getName() != null && update.getName().equals(""))
                 || (update.getLecturer() != null && update.getLecturer().equals(""))
                 || update.getName()  == null || update.getLecturer() == null
@@ -61,14 +62,11 @@ public class CourseResource {
             return Response.status(400).build();
         }
 
-        Course current = CourseDB.get(id);
-        if (current == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
-        current.setName(update.getName());
-        current.setLecturer(update.getLecturer());
-        CourseDB.put(current.getId(), current);
+        if (LocalDatabase.getInstance().updateCourse(id, update) == null)
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+
         return Response.status(204).build();
     }
-
     @DELETE
     @Path("{id}")
     public void deleteCourse(@PathParam("id") int id) {
