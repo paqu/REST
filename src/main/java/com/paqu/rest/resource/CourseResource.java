@@ -5,7 +5,6 @@ import com.paqu.rest.model.Course;
 
 import java.net.URI;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -21,30 +20,26 @@ import javax.ws.rs.core.Response;
 @Path("/courses")
 public class CourseResource {
 
-    // local database for students
-    static private final Map<Integer, Course> CourseDB = LocalDatabase.getInstance().getCourses();
-
-    static private AtomicInteger idCounter = new AtomicInteger(2);
-
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response createCourse(Course course) {
+        int courseId;
         if ((course.getName() != null && course.getName().equals(""))
                 || (course.getLecturer() != null && course.getLecturer().equals(""))
                 || course.getName()  == null || course.getLecturer() == null
         ) {
             return Response.status(400).build();
         }
-        course.setId(idCounter.incrementAndGet());
-        CourseDB.put(course.getId(), course);
-        return Response.created(URI.create("/courses/" + course.getId())).build();
+        courseId = LocalDatabase.getInstance().addCourse(course);
+
+        return Response.created(URI.create("/courses/" + courseId)).build();
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
     public Course getCourse(@PathParam("id") int id) {
-        Course course = CourseDB.get(id);
+        Course course = LocalDatabase.getInstance().getCourse(id);
         if (course == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
         return course;
     }
@@ -53,6 +48,7 @@ public class CourseResource {
     @Path("{id}")
     @Consumes({"application/xml", "application/json"})
     public Response updateCourse(@PathParam("id") int id, Course update)  {
+
         if ((update.getName() != null && update.getName().equals(""))
                 || (update.getLecturer() != null && update.getLecturer().equals(""))
                 || update.getName()  == null || update.getLecturer() == null
@@ -60,18 +56,15 @@ public class CourseResource {
             return Response.status(400).build();
         }
 
-        Course current = CourseDB.get(id);
-        if (current == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
-        current.setName(update.getName());
-        current.setLecturer(update.getLecturer());
-        CourseDB.put(current.getId(), current);
+        if (LocalDatabase.getInstance().updateCourse(id, update) == null)
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+
         return Response.status(204).build();
     }
-
     @DELETE
     @Path("{id}")
     public void deleteCourse(@PathParam("id") int id) {
-        Course current = CourseDB.remove(id);
+        Course current = LocalDatabase.getInstance().removeCourse(id);
         if (current == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
         LocalDatabase.getInstance().removeGradesWithCourseId(id);
     }
@@ -79,7 +72,6 @@ public class CourseResource {
     @GET
     @Produces({ "application/xml", "application/json"})
     public Collection<Course> getCourses() {
-        List<Course> courseList = new ArrayList<Course>(CourseDB.values());
-        return courseList;
+        return LocalDatabase.getInstance().getCourses();
     }
 }
