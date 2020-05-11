@@ -115,10 +115,12 @@ public class LocalDatabase {
 
         return current;
     }
-
-    public Map<Integer, Course> getCourses() {
-        return this.CourseDB;
+    public Collection<Course> getCourses()
+    {
+        List<Course> studentList = new ArrayList<Course>(CourseDB.values());
+        return studentList;
     }
+
 
     synchronized public void removeGradesWithCourseId(int courseID) {
         for (var student : StudentDB.values()) {

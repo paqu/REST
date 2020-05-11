@@ -5,7 +5,6 @@ import com.paqu.rest.model.Course;
 
 import java.net.URI;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,11 +19,6 @@ import javax.ws.rs.core.Response;
 
 @Path("/courses")
 public class CourseResource {
-
-    // local database for students
-    static private final Map<Integer, Course> CourseDB = LocalDatabase.getInstance().getCourses();
-
-
 
     @POST
     @Consumes({"application/xml", "application/json"})
@@ -78,7 +72,6 @@ public class CourseResource {
     @GET
     @Produces({ "application/xml", "application/json"})
     public Collection<Course> getCourses() {
-        List<Course> courseList = new ArrayList<Course>(CourseDB.values());
-        return courseList;
+        return LocalDatabase.getInstance().getCourses();
     }
 }

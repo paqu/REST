@@ -24,8 +24,6 @@ import javax.ws.rs.core.Response;
 public class GradeResource {
 
     // local database for students
-    static private final Map<Integer, Course>  CourseDB  = LocalDatabase.getInstance().getCourses();
-
     static private AtomicInteger idCounter = new AtomicInteger(7);
 
     @POST
@@ -43,7 +41,8 @@ public class GradeResource {
             return Response.status(400).build();
         }
 
-        Course course   = CourseDB.get(grade.getCourse().getId());
+        Course course = LocalDatabase.getInstance().getCourse(grade.getCourse().getId());
+
         if (course == null) throw new WebApplicationException(400); //to meet test expect, should be 404 in my opinion
 
         grade.setId(idCounter.incrementAndGet());
@@ -77,6 +76,7 @@ public class GradeResource {
     public Response updateGrade(@PathParam("index") int index, @PathParam("id") int id, Grade update)  {
 
         Student student = LocalDatabase.getInstance().getStudent(index);
+
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
 
         Grade grade = null;
@@ -85,6 +85,7 @@ public class GradeResource {
                 grade = g;
             }
         }
+
         if (grade == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
 
         if (update.getDate() == null
@@ -96,7 +97,7 @@ public class GradeResource {
             return Response.status(400).build();
         }
 
-        Course course   = CourseDB.get(update.getCourse().getId());
+        Course course = LocalDatabase.getInstance().getCourse(update.getCourse().getId());
         if (course == null) throw new WebApplicationException(400); //to meet test expect, should be 404 in my opinion
 
         grade.setValue(update.getValue());
