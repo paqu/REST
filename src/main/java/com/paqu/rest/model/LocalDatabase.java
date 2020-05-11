@@ -94,6 +94,11 @@ public class LocalDatabase {
         return courseId;
     }
 
+    public Course removeCourse(int courseId)
+    {
+        return CourseDB.remove(courseId);
+    };
+
     public Course getCourse(int courseId)
     {
         return CourseDB.get(courseId);
