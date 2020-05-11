@@ -11,9 +11,12 @@ public class LocalDatabase {
     static private final Map<Integer, Student> StudentDB = new ConcurrentHashMap<Integer, Student>();
     static private final Map<Integer, Course> CourseDB = new ConcurrentHashMap<Integer, Course>();
     static private AtomicInteger indexCounter;
+    static private AtomicInteger courseIdCounter;
 
     static {
         indexCounter  = new AtomicInteger(15000);
+        courseIdCounter = new AtomicInteger( 2);
+
         Student s1 = new Student(109787, "Pawel", "Kusz", new Date(93, 10, 17), new ArrayList<Grade>());
         Student s2 = new Student(117123, "Piotr", "Kusz", new Date(93, 10, 17), new ArrayList<Grade>());
         Student s3 = new Student(123456, "Romek", "Kaczynski", new Date(65, 9, 23), new ArrayList<Grade>());
@@ -82,7 +85,14 @@ public class LocalDatabase {
     };
 
 
-
+ //==================================================
+    public int addCourse(Course course)
+    {
+        int courseId = courseIdCounter.incrementAndGet();
+        course.setId(courseId);
+        CourseDB.put(courseId, course);
+        return courseId;
+    }
 
     public Map<Integer, Course> getCourses() {
         return this.CourseDB;

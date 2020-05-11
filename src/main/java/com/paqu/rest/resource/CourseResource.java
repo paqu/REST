@@ -24,20 +24,21 @@ public class CourseResource {
     // local database for students
     static private final Map<Integer, Course> CourseDB = LocalDatabase.getInstance().getCourses();
 
-    static private AtomicInteger idCounter = new AtomicInteger(2);
+
 
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response createCourse(Course course) {
+        int courseId;
         if ((course.getName() != null && course.getName().equals(""))
                 || (course.getLecturer() != null && course.getLecturer().equals(""))
                 || course.getName()  == null || course.getLecturer() == null
         ) {
             return Response.status(400).build();
         }
-        course.setId(idCounter.incrementAndGet());
-        CourseDB.put(course.getId(), course);
-        return Response.created(URI.create("/courses/" + course.getId())).build();
+        courseId = LocalDatabase.getInstance().addCourse(course);
+
+        return Response.created(URI.create("/courses/" + courseId)).build();
     }
 
     @GET
