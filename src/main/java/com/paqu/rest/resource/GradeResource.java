@@ -7,7 +7,6 @@ import com.paqu.rest.model.Course;
 
 import java.net.URI;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -23,15 +22,10 @@ import javax.ws.rs.core.Response;
 @Path("/students/{index}/grades")
 public class GradeResource {
 
-    // local database for students
-    static private AtomicInteger idCounter = new AtomicInteger(7);
 
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response createGrade(@PathParam("index") int index, Grade grade) {
-        Student student = LocalDatabase.getInstance().getStudent(index);
-        if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
-
         if (grade.getDate() == null
                 || grade.getCourse() == null
                 || grade.getValue() < 2.0
@@ -41,15 +35,11 @@ public class GradeResource {
             return Response.status(400).build();
         }
 
-        Course course = LocalDatabase.getInstance().getCourse(grade.getCourse().getId());
-
-        if (course == null) throw new WebApplicationException(400); //to meet test expect, should be 404 in my opinion
-
-        grade.setId(idCounter.incrementAndGet());
-        grade.setCourse(course);
-        student.getGrades().add(grade);
-        LocalDatabase.getInstance().updateStudent(index, student);
-        return Response.created(URI.create("/students/" + student.getIndex() + "/grades/" + grade.getId())).build();
+        int gradeId = LocalDatabase.getInstance().addGrade(index, grade);
+        if (gradeId == -1) {
+            throw new WebApplicationException(400);
+        }
+        return Response.created(URI.create("/students/" + index + "/grades/" + gradeId)).build();
     }
 
     @GET

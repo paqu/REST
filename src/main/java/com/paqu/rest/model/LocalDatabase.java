@@ -1,7 +1,5 @@
 package com.paqu.rest.model;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,10 +10,13 @@ public class LocalDatabase {
     static private final Map<Integer, Course> CourseDB = new ConcurrentHashMap<Integer, Course>();
     static private AtomicInteger indexCounter;
     static private AtomicInteger courseIdCounter;
+    static private AtomicInteger gradeIdCounter;
+
 
     static {
         indexCounter  = new AtomicInteger(15000);
         courseIdCounter = new AtomicInteger( 2);
+        gradeIdCounter = new AtomicInteger(7);
 
         Student s1 = new Student(109787, "Pawel", "Kusz", new Date(93, 10, 17), new ArrayList<Grade>());
         Student s2 = new Student(117123, "Piotr", "Kusz", new Date(93, 10, 17), new ArrayList<Grade>());
@@ -85,7 +86,7 @@ public class LocalDatabase {
     };
 
 
- //==================================================
+
     public int addCourse(Course course)
     {
         int courseId = courseIdCounter.incrementAndGet();
@@ -120,6 +121,26 @@ public class LocalDatabase {
         List<Course> studentList = new ArrayList<Course>(CourseDB.values());
         return studentList;
     }
+
+    public int addGrade(int index, Grade grade)
+    {
+        Student student = getStudent(index);
+        if (student == null) return -1;
+
+        Course course = getCourse(grade.getCourse().getId());
+        if (course == null) return -1;
+
+        int gradeId = gradeIdCounter.incrementAndGet();
+        grade.setId(gradeId);
+        grade.setCourse(course);
+        student.getGrades().add(grade);
+        updateStudent(index, student);
+
+        return gradeId;
+    }
+
+
+
 
 
     synchronized public void removeGradesWithCourseId(int courseID) {
