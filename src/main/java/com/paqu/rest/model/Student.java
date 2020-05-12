@@ -2,8 +2,8 @@ package com.paqu.rest.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.paqu.rest.resource.GradeResource;
-import com.paqu.rest.resource.StudentResource;
+import dev.morphia.annotations.*;
+import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
@@ -16,15 +16,23 @@ import java.util.List;
 
 @XmlRootElement(name="student")
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity(value = "students")
 public class Student {
 
 
+    @Id
+    @XmlTransient
+    private ObjectId _id;
+
+    @Indexed(options = @IndexOptions(unique = true))
     private int index;
     private String firstName;
     private String lastName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Europe/Warsaw")
     private Date birthday;
+
+    @Embedded
     @XmlTransient
     private ArrayList<Grade> grades;
 
@@ -38,6 +46,17 @@ public class Student {
         this.birthday = birthday;
         this.grades = grades;
 
+    }
+
+    @XmlTransient
+    public ObjectId getId()
+    {
+        return this._id;
+    }
+
+    public void setId(ObjectId id)
+    {
+        this._id = id;
     }
 
     public int getIndex() {
