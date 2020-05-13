@@ -3,6 +3,7 @@ package com.paqu.rest.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paqu.rest.resource.GradeResource;
 import dev.morphia.annotations.Reference;
+import dev.morphia.annotations.Transient;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
@@ -60,5 +61,6 @@ public class Grade {
     @XmlElement(name="link")
     @XmlElementWrapper(name = "links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    @Transient
     List<Link> links;
 }
