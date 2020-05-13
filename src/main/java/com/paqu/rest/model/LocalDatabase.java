@@ -258,7 +258,7 @@ public class LocalDatabase {
         List<Course> courseList = database.createQuery(Course.class).find().toList();
         return courseList;
     }
-
+/*
     public Course updateCourse(int courseId, Course update)
     {
         Course current = CourseDB.get(courseId);
@@ -270,8 +270,17 @@ public class LocalDatabase {
 
         return current;
     }
+*/
+    public Course updateCourse(int courseId, Course update)
+    {
+        Course current = getCourse(courseId);
+        if (current == null) return null;
+        current.setName(update.getName());
+        current.setLecturer(update.getLecturer());
 
-
+        database.save(current);
+        return current;
+    }
     public long getNextGradeId() {
         GradeId gradeId = database.findAndModify(database.createQuery(GradeId.class),
                 database.createUpdateOperations(GradeId.class).inc("lastGradeId", 1));
