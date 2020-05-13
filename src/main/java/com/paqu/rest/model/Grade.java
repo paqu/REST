@@ -2,6 +2,7 @@ package com.paqu.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paqu.rest.resource.GradeResource;
+import dev.morphia.annotations.Reference;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
@@ -20,6 +21,7 @@ public class Grade {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Europe/Warsaw")
     private Date date;
+    @Reference
     private Course course;
 
     public Grade () {};
