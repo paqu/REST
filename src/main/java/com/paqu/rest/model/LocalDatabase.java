@@ -193,12 +193,24 @@ public class LocalDatabase {
         return current;
 
     }
+    /*
     public Student removeStudent(int index)
     {
         return StudentDB.remove(index);
     };
 
+     */
 
+    public Student removeStudent(int index)
+    {
+        Student student = getStudent(index);
+        if (student == null)
+            return null;
+
+        database.delete(student);
+
+        return student;
+    };
 
 
 
