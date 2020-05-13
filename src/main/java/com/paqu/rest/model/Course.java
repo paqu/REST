@@ -2,23 +2,18 @@ package com.paqu.rest.model;
 
 import com.paqu.rest.resource.CourseResource;
 import com.paqu.rest.utils.ObjectIdJaxbAdapter;
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
-import dev.morphia.annotations.IndexOptions;
-import dev.morphia.annotations.Indexed;
+import dev.morphia.annotations.*;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
 import javax.ws.rs.core.Link;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 @XmlRootElement(name="course")
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity(value = "courses")
 public class Course {
     @Id
@@ -37,8 +32,6 @@ public class Course {
         this.lecturer = lecturer;
     }
 
-
-    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     public ObjectId get_id() {
         return this._id;
     }
@@ -80,6 +73,7 @@ public class Course {
     @XmlElement(name="link")
     @XmlElementWrapper(name = "links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    @Transient
     List<Link> links;
 
 }
