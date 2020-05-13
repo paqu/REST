@@ -157,7 +157,7 @@ public class LocalDatabase {
         return studentList;
     }
 
-
+/*
     public Student updateStudent(int index, Student update)
     {
         Student current = StudentDB.get(index);
@@ -170,9 +170,22 @@ public class LocalDatabase {
         StudentDB.put(current.getIndex(), current);
 
         return current;
+    }
+*/
+    public Student updateStudent(int index, Student update)
+    {
+        Student current = getStudent(index);
+        if (current == null) return null;
+
+        current.setFirstName(update.getFirstName());
+        current.setLastName(update.getLastName());
+        current.setBirthday(update.getBirthday());
+
+        database.save(current);
+
+        return current;
 
     }
-
     public Student removeStudent(int index)
     {
         return StudentDB.remove(index);
