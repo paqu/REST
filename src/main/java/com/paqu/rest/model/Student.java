@@ -2,6 +2,7 @@ package com.paqu.rest.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.paqu.rest.utils.ObjectIdJaxbAdapter;
 import dev.morphia.annotations.*;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.InjectLink;
@@ -48,7 +49,6 @@ public class Student {
 
     }
 
-    @XmlTransient
     public ObjectId getId()
     {
         return this._id;
@@ -110,6 +110,7 @@ public class Student {
     @XmlElement(name="link")
     @XmlElementWrapper(name = "links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    @Transient
     List<Link> links;
 }
 
