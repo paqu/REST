@@ -136,16 +136,15 @@ public class LocalDatabase {
         StudentDB.put(index, student);
         return index;
     }
-
+/*
     public Student getStudent(int index) {
         return StudentDB.get(index);
-    }
-/*
+    }*/
+
     public Student getStudent(long index) {
         return database.createQuery(Student.class).filter("index", index).first();
-
     }
-*/
+
 /*
     public Collection<Student> getStudents() {
         List<Student> studentList = new ArrayList<Student>(StudentDB.values());
