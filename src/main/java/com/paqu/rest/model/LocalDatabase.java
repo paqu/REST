@@ -223,12 +223,20 @@ public class LocalDatabase {
         }
         return courseId.getLastCourseId();
     }
-
+/*
     public int addCourse(Course course)
     {
         int courseId = courseIdCounter.incrementAndGet();
         course.setId(courseId);
         CourseDB.put(courseId, course);
+        return courseId;
+    }
+*/
+    public int addCourse(Course course)
+    {
+        int courseId = (int)getNextCourseId();
+        course.setId(courseId);
+        database.save(course);
         return courseId;
     }
 
@@ -281,6 +289,7 @@ public class LocalDatabase {
         database.save(current);
         return current;
     }
+
     public long getNextGradeId() {
         GradeId gradeId = database.findAndModify(database.createQuery(GradeId.class),
                 database.createUpdateOperations(GradeId.class).inc("lastGradeId", 1));
@@ -306,9 +315,6 @@ public class LocalDatabase {
 
         return gradeId;
     }
-
-
-
 
 
     synchronized public void removeGradesWithCourseId(int courseID) {
