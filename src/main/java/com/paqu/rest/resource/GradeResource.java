@@ -66,7 +66,6 @@ public class GradeResource {
     public Response updateGrade(@PathParam("index") int index, @PathParam("id") int id, Grade update)  {
 
         Student student = LocalDatabase.getInstance().getStudent(index);
-
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
 
         Grade grade = null;
@@ -93,8 +92,7 @@ public class GradeResource {
         grade.setValue(update.getValue());
         grade.setDate(update.getDate());
         grade.setCourse(course);
-
-        LocalDatabase.getInstance().updateStudent(index, student);
+        LocalDatabase.getInstance().updateStudentGrades(index, student.getGrades());
         return Response.status(204).build();
     }
 
@@ -113,7 +111,7 @@ public class GradeResource {
 
         if (grade == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
         student.getGrades().remove(grade);
-        LocalDatabase.getInstance().updateStudent(index, student);
+        LocalDatabase.getInstance().updateStudentGrades(index, student.getGrades());
     }
 
     @GET

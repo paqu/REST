@@ -28,6 +28,7 @@ public class LocalDatabase {
         this.client = new MongoClient("localhost", 8004);
         this.morphia = new Morphia();
         this.morphia.getMapper().getOptions().setStoreEmpties(true);
+        this.morphia.getMapper().getOptions().setStoreNulls(true);
         this.morphia.mapPackage("model");
         this.database = this.morphia.createDatastore(client, "SIDBStudents");
         this.database.ensureIndexes();
@@ -139,8 +140,14 @@ public class LocalDatabase {
     */
     public int addStudent(Student student) {
         int index = (int)getNextIndex();
-        student.setIndex(index);
-        database.save(student);
+        Student newStudent = new Student(
+                index,
+                student.getFirstName(),
+                student.getLastName(),
+                student.getBirthday(),
+                new ArrayList<>()
+        );
+        database.save(newStudent);
         return index;
     }
 /*
@@ -187,7 +194,6 @@ public class LocalDatabase {
         current.setFirstName(update.getFirstName());
         current.setLastName(update.getLastName());
         current.setBirthday(update.getBirthday());
-
         database.save(current);
 
         return current;
@@ -318,21 +324,28 @@ public class LocalDatabase {
         Course course = getCourse(grade.getCourse().getId());
         if (course == null) return -1;
 
-        int gradeId = gradeIdCounter.incrementAndGet();
+        int gradeId = (int)getNextGradeId();
         grade.setId(gradeId);
         grade.setCourse(course);
         student.getGrades().add(grade);
-        updateStudent(index, student);
+        updateStudentGrades(index, student.getGrades());
 
         return gradeId;
     }
+    public void updateStudentGrades(int index, ArrayList <Grade> grades)
+    {
+        Student student = getStudent(index);
+        student.setGrades(grades);
+        database.save(student);
 
+    }
 
     public void removeGradesWithCourseId(int courseID) {
         for (var student : getStudents()) {
-            for (var grade : student.getGrades()) {
+            for (Iterator<Grade> it = student.getGrades().iterator(); it.hasNext();) {
+                Grade grade = it.next();
                 if (grade.getCourse().getId() == courseID)
-                    student.getGrades().remove(grade);
+                    it.remove();
             }
             database.save(student);
         }
