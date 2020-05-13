@@ -236,10 +236,27 @@ public class LocalDatabase {
     {
         return CourseDB.remove(courseId);
     };
-
+/*
     public Course getCourse(int courseId)
     {
         return CourseDB.get(courseId);
+    }
+ */
+    public Course getCourse(int courseId)
+    {
+        return database.createQuery(Course.class).filter("id", courseId).first();
+    }
+    /*
+    public Collection<Course> getCourses()
+    {
+        List<Course> studentList = new ArrayList<Course>(CourseDB.values());
+        return studentList;
+    }
+     */
+    public Collection<Course> getCourses()
+    {
+        List<Course> courseList = database.createQuery(Course.class).find().toList();
+        return courseList;
     }
 
     public Course updateCourse(int courseId, Course update)
@@ -253,11 +270,7 @@ public class LocalDatabase {
 
         return current;
     }
-    public Collection<Course> getCourses()
-    {
-        List<Course> studentList = new ArrayList<Course>(CourseDB.values());
-        return studentList;
-    }
+
 
     public long getNextGradeId() {
         GradeId gradeId = database.findAndModify(database.createQuery(GradeId.class),
