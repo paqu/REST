@@ -239,11 +239,6 @@ public class LocalDatabase {
         database.save(course);
         return courseId;
     }
-
-    public Course removeCourse(int courseId)
-    {
-        return CourseDB.remove(courseId);
-    };
 /*
     public Course getCourse(int courseId)
     {
@@ -289,6 +284,22 @@ public class LocalDatabase {
         database.save(current);
         return current;
     }
+    /*
+    public Course removeCourse(int courseId)
+    {
+        return CourseDB.remove(courseId);
+    };
+     */
+    public Course removeCourse(int courseId)
+    {
+        Course course = getCourse(courseId);
+        if (course == null)
+            return null;
+
+        database.delete(course);
+
+        return course;
+    };
 
     public long getNextGradeId() {
         GradeId gradeId = database.findAndModify(database.createQuery(GradeId.class),
@@ -317,13 +328,13 @@ public class LocalDatabase {
     }
 
 
-    synchronized public void removeGradesWithCourseId(int courseID) {
-        for (var student : StudentDB.values()) {
-            for (Iterator<Grade> it = student.getGrades().iterator(); it.hasNext();) {
-                Grade grade = it.next();
+    public void removeGradesWithCourseId(int courseID) {
+        for (var student : getStudents()) {
+            for (var grade : student.getGrades()) {
                 if (grade.getCourse().getId() == courseID)
-                    it.remove();
+                    student.getGrades().remove(grade);
             }
+            database.save(student);
         }
     }
 }
