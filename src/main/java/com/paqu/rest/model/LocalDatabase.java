@@ -129,11 +129,18 @@ public class LocalDatabase {
         }
         return index.getLastIndex();
     }
-
+/*
     public int addStudent(Student student) {
         int index = indexCounter.incrementAndGet();
         student.setIndex(index);
         StudentDB.put(index, student);
+        return index;
+    }
+    */
+    public int addStudent(Student student) {
+        int index = (int)getNextIndex();
+        student.setIndex(index);
+        database.save(student);
         return index;
     }
 /*
