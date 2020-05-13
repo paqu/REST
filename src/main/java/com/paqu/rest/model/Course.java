@@ -1,6 +1,12 @@
 package com.paqu.rest.model;
 
 import com.paqu.rest.resource.CourseResource;
+import com.paqu.rest.utils.ObjectIdJaxbAdapter;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+import dev.morphia.annotations.IndexOptions;
+import dev.morphia.annotations.Indexed;
+import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
@@ -8,11 +14,17 @@ import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 @XmlRootElement(name="course")
+@Entity(value = "courses")
 public class Course {
+    @Id
+    @XmlTransient
+    private ObjectId _id;
+    @Indexed(options = @IndexOptions(unique = true))
     private int id;
     private String name;
     private String lecturer;
@@ -26,6 +38,13 @@ public class Course {
     }
 
 
+    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+    public ObjectId get_id() {
+        return this._id;
+    }
+    public void set_id(ObjectId id) {
+        this._id = id;
+    }
 
     public int getId() { return this.id; }
     public void setId(int id) { this.id = id; }
