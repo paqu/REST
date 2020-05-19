@@ -2,18 +2,11 @@ package com.paqu.rest.resource;
 
 import com.paqu.rest.model.LocalDatabase;
 import com.paqu.rest.model.Course;
+import dev.morphia.query.Query;
 
 import java.net.URI;
 import java.util.*;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 
@@ -71,7 +64,12 @@ public class CourseResource {
 
     @GET
     @Produces({ "application/xml", "application/json"})
-    public Collection<Course> getCourses() {
-        return LocalDatabase.getInstance().getCourses();
+    public Collection<Course> getCourses(
+
+            @QueryParam("name") String name,
+            @QueryParam("lecturer") String lecturer
+    ) {
+
+        return LocalDatabase.getInstance().getCourses(name, lecturer);
     }
 }

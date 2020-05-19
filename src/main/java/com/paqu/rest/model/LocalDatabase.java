@@ -3,6 +3,7 @@ package com.paqu.rest.model;
 import com.mongodb.MongoClient;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
+import dev.morphia.query.Query;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,8 +18,7 @@ public class LocalDatabase {
     static private LocalDatabase instance = new LocalDatabase();
 
 
-
-    //public Datastore getDatabase() { return database; }
+    public Datastore getDatabase() { return database; }
 /*
     static {
         initDB(new LocalDatabase());
@@ -262,9 +262,16 @@ public class LocalDatabase {
         return studentList;
     }
      */
-    public Collection<Course> getCourses()
+    public Collection<Course> getCourses(String name, String lecturer)
     {
-        List<Course> courseList = database.createQuery(Course.class).find().toList();
+        Query<Course> query = database.createQuery(Course.class);
+        if (name != null) {
+            query = query.field("name").containsIgnoreCase(name);
+        }
+        if (lecturer != null) {
+            query = query.field("lecturer").containsIgnoreCase(lecturer);
+        }
+        List<Course> courseList = query.find().toList();
         return courseList;
     }
 /*
@@ -332,6 +339,7 @@ public class LocalDatabase {
 
         return gradeId;
     }
+
     public void updateStudentGrades(int index, ArrayList <Grade> grades)
     {
         Student student = getStudent(index);
@@ -350,4 +358,5 @@ public class LocalDatabase {
             database.save(student);
         }
     }
+
 }
