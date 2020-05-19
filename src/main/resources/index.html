@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>System zarzdzania ocenami studentów - 109787, Pawel Kusz</title>
+    <meta charset="UTF-8">
+    <style>
+    article {
+        display:none;
+    }
+    article:target {
+        display:block;
+    }
+
+    </style>
+
+</head>
+<body>
+    <div>
+        <header>
+            <img src="logo.png" alt="logo"/>
+            <h1>System zarządzania ocenami studentów</h1>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="#courses">Zarządzaj kursami</a></li>
+                <li><a href="#students">Zarzadzaj studentami</a></li>
+            </ul>
+        </nav>
+
+        <article id="courses">
+            <form id="coursesForm">
+                <table>
+                    <caption><h2>Lista kursów</h2></caption>
+                    <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Prowadzacy</th>
+                        <th>Akcja</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input  type="search" placeholder="Nazwa kursu" name="searchCourse" /></td>
+                        <td><input  type="search" placeholder="Prowadzący" name="searchLecturer" /></td>
+                        <td><button type="button" name="courseSearch">Szukaj</button></td>
+                    </tr>
+                    <tr>
+                        <td><input required type="text" value="Kurs 1" /></td>
+                        <td><input required type="text" value="Prowadzacy 1" /></td>
+                        <td><button type="button" >Usuń</button></td>
+                    </tr>
+                    <tr>
+                        <td><input required type="text" value="Kurs 2" /></td>
+                        <td><input required type="text" value="Prowadzacy 2" /></td>
+                        <td><button type="button" >Usuń</button></td>
+                    </tr>
+                    <tr>
+                        <td><input required type="text" value="Kurs 3" /></td>
+                        <td><input required type="text" value="Prowadzacy 3" /></td>
+                        <td><button type="button" >Usuń</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button type="button" name="addCourse" >Dodaj kurs</button>
+            </form>
+        </article>
+        <article id="students">
+            <form  id="studentsForm">
+                <table>
+                    <caption><h2>Lista studentów</h2></caption>
+                    <thead>
+                        <tr>
+                            <th>Indeks</th>
+                            <th>Imię</th>
+                            <th>Nazwisko</th>
+                            <th>Data urodzenia</th>
+                            <th>Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input required type="search" placeholder="Indeks" name="searchIndex" /></td>
+                            <td><input required type="search" placeholder="Imię" name="searchFirstName" /></td>
+                            <td><input required type="search" placeholder="Nazwisko" name="searchLastName" /></td>
+                            <td><input required type="date"  name="searchDateBirthMin" /><input type="date"  name="searchDateBirthMax" /></td>
+                            <td><button type="button" name="searchStudent" >Szukaj</button></td>
+                        </tr>
+                        <tr>
+                            <td><input required type="text" readonly value="109787"/></td>
+                            <td><input required type="text" value="imie 1" /></td>
+                            <td><input required type="text" value="Nazwisko 1" /></td>
+                            <td><input required type="date" value="1993-11-17" /></td>
+                            <td>
+                                <a href="#grades">Zobacz oceny</a>
+                                <button type="button" >Usuń</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input required type="text" readonly value="109788"/></td>
+                            <td><input required type="text" value="imie 2" /></td>
+                            <td><input required type="text" value="Nazwisko 2" /></td>
+                            <td><input required type="date" value="2000-12-12" /></td>
+                            <td>
+                                <a href="#grades">Zobacz oceny</a>
+                                <button type="button" >Usuń</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input required type="text" readonly value="109789"/></td>
+                            <td><input required type="text" value="imie 3" /></td>
+                            <td><input required type="text" value="Nazwisko 3" /></td>
+                            <td><input required type="date" value="2001-10-01"></td>
+                            <td>
+                                <a href="#grades">Zobacz oceny</a>
+                                <button type="button" >Usuń</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" name="addStudent">Dodaj studenta</button>
+            </form>
+
+        </article>
+        <article id="grades">
+            <form id="gradesForm">
+                <table>
+                    <caption><h2>Lista ocen studenta: imie1 Nazwisko1</h2></caption>
+                    <thead>
+                    <tr>
+                        <th>Kurs</th>
+                        <th>Data</th>
+                        <th>Ocena</th>
+                        <th>Akcje:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="search" placeholder="Nazwa kursu" name="searchCourse"></td>
+                        <td><input type="date"  name="gradeAddTimeMin" /><input type="date"  name="gradeAddTimeMax" /></td>
+                        <td><input type="number" min="2" max="5" step="0.5" name="gradeMin">
+                            <input type="number" min="2" max="5" step="0.5" name="gradeMax"></td>
+                        <td><button type="button" name="searchGrade">Szukaj</button></td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <select>
+                                <option value="kurs 1">Kurs 1</option>
+                                <option value="kurs 2">Kurs 2</option>
+                                <option value="kurs 3">Kurs 3</option>
+                                <option value="kurs 4">Kurs 4</option>
+                            </select>
+                        </td>
+                        <td><input required type="date" /></td>
+                        <td><input required type="number" value="2.0" min="2" max="5" step="0.5"/></td>
+                        <td>
+                            <button type="button" >Usuń</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button type="button" name="addGrade">Dodaj ocenę</button>
+            </form>
+        </article>
+        <footer>
+            <p>&copy;2020 Pawel Kusz - 109787</p>
+            <a href="http://www.cs.put.poznan.pl/tpawlak/?systemy-internetowe,23"> Systemy Internetowe</a><br />
+            <a href="https://www.put.poznan.pl/">Politechnika Poznańska</a>
+        </footer>
+    </div>
+</body>
+</html>
