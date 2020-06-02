@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <title>System zarzdzania ocenami studentów - 109787, Pawel Kusz</title>
     <meta charset="UTF-8">
@@ -7,12 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
-
 </head>
+
 <body>
-<div class="container">
+    <div class="container">
         <header id="mainHeader">
-            <img src="logo.png" alt="logo"/>
+            <img src="logo.png" alt="logo" />
             <h1>System zarządzania ocenami studentów</h1>
         </header>
         <div id="mainContent">
@@ -26,137 +27,135 @@
                 <div id="views">
                     <article id="courses">
                         <form id="coursesForm">
+
                             <table>
-                                <caption><h2>Lista kursów</h2></caption>
+                                <caption>
+                                    <h2>List kursów</h2>
+                                </caption>
                                 <thead>
-                                <tr>
-                                    <th>Nazwa</th>
-                                    <th>Prowadzacy</th>
-                                    <th class="action">Akcja</th>
-                                </tr>
+                                    <tr>
+                                        <th>Nazwa</th>
+                                        <th>Prowadzacy</th>
+                                        <th class="action">Akcja</th>
+                                    </tr>
+                                    <tr class="filtr">
+                                        <td><input type="search" placeholder="Nazwa kursu" name="searchCourse" /></td>
+                                        <td><input type="search" placeholder="Prowadzący" name="searchLecturer" /></td>
+                                        <td class="action"><button type="button" name="courseSearch">Szukaj <i
+                                                    class="fa fa-search"></i></button></td>
+                                    </tr>
+
                                 </thead>
-                                <tbody>
-                                <tr class="filtr">
-                                    <td><input  type="search" placeholder="Nazwa kursu" name="searchCourse" /></td>
-                                    <td><input  type="search" placeholder="Prowadzący" name="searchLecturer" /></td>
-                                    <td class="action"><button type="button" name="courseSearch">Szukaj <i class="fa fa-search"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td><input required type="text" value="Kurs 1" /></td>
-                                    <td><input required type="text" value="Prowadzacy 1" /></td>
-                                    <td class="action"><button type="button" >Usuń  <i class="fa fa-trash"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td><input required type="text" value="Kurs 2" /></td>
-                                    <td><input required type="text" value="Prowadzacy 2" /></td>
-                                    <td class="action"><button type="button" >Usuń  <i class="fa fa-trash"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td><input required type="text" value="Kurs 3" /></td>
-                                    <td><input required type="text" value="Prowadzacy 3" /></td>
-                                    <td class="action"><button type="button" >Usuń  <i class="fa fa-trash"></i></button></td>
-                                </tr>
+                                <tbody data-bind="template: { name: 'coursesTemplate', foreach: courses }">
                                 </tbody>
+                                <script type="text/html" id="coursesTemplate">
+                                    <tr>
+                                        <td><input required type="text" data-bind="value: name" /></td>
+                                        <td><input required type="text" data-bind="value: lecturer" /></td>
+                                        <td data-bind="click: $parent.removeCourse" class="action"><button
+                                                type="button">Usuń <i class="fa fa-trash"></i></button></td>
+                                    </tr>
+                                </script>
+
                             </table>
-                            <button type="button" name="addCourse" >Dodaj kurs   <i class="fa fa-plus"></i></button>
+                            <button data-bind="click: addCourse" type="button" name="addCourse">Dodaj kurs <i
+                                    class="fa fa-plus"></i></button>
                         </form>
                     </article>
                     <article id="students">
-                        <form  id="studentsForm">
+                        <form id="studentsForm">
                             <table>
-                                <caption><h2>Lista studentów</h2></caption>
+                                <caption>
+                                    <h2>Lista studentów</h2>
+                                </caption>
                                 <thead>
-                                <tr>
-                                    <th>Indeks</th>
-                                    <th>Imię</th>
-                                    <th>Nazwisko</th>
-                                    <th>Data urodzenia</th>
-                                    <th class="action">Akcje</th>
-                                </tr>
+                                    <tr>
+                                        <th>Indeks</th>
+                                        <th>Imię</th>
+                                        <th>Nazwisko</th>
+                                        <th>Data urodzenia</th>
+                                        <th class="action">Akcje</th>
+                                    </tr>
+                                    <tr class="filtr">
+                                        <td><input type="search" placeholder="Indeks" name="searchIndex" /></td>
+                                        <td><input type="search" placeholder="Imię" name="searchFirstName" /></td>
+                                        <td><input type="search" placeholder="Nazwisko" name="searchLastName" /></td>
+                                        <td><input type="date" name="searchDateBirthMin" /><input type="date"
+                                                name="searchDateBirthMax" /></td>
+                                        <td class="action"><button type="button" name="searchStudent">Szukaj <i
+                                                    class="fa fa-search"></i> </button></td>
+                                    </tr>
                                 </thead>
-                                <tbody>
-                                <tr class="filtr">
-                                    <td><input  type="search" placeholder="Indeks" name="searchIndex" /></td>
-                                    <td><input  type="search" placeholder="Imię" name="searchFirstName" /></td>
-                                    <td><input  type="search" placeholder="Nazwisko" name="searchLastName" /></td>
-                                    <td><input  type="date"  name="searchDateBirthMin" /><input type="date"  name="searchDateBirthMax" /></td>
-                                    <td class="action"><button type="button" name="searchStudent" >Szukaj <i class="fa fa-search"></i> </button></td>
-                                </tr>
-                                <tr>
-                                    <td><input required type="text" readonly value="109787"/></td>
-                                    <td><input required type="text" value="imie 1" /></td>
-                                    <td><input required type="text" value="Nazwisko 1" /></td>
-                                    <td><input required type="date" value="1993-11-17" /></td>
-                                    <td class="action">
-                                        <a href="#grades">Zobacz oceny</a>
-                                        <button type="button" >Usuń  <i class="fa fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input required type="text" readonly value="109788"/></td>
-                                    <td><input required type="text" value="imie 2" /></td>
-                                    <td><input required type="text" value="Nazwisko 2" /></td>
-                                    <td><input required type="date" value="2000-12-12" /></td>
-                                    <td class="action">
-                                        <a href="#grades">Zobacz oceny</a>
-                                        <button type="button" >Usuń  <i class="fa fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input required type="text" readonly value="109789"/></td>
-                                    <td><input required type="text" value="imie 3" /></td>
-                                    <td><input required type="text" value="Nazwisko 3" /></td>
-                                    <td><input required type="date" value="2001-10-01"></td>
-                                    <td class="action">
-                                        <a href="#grades">Zobacz oceny</a>
-                                        <button type="button" >Usuń  <i class="fa fa-trash"></i></button>
-                                    </td>
-                                </tr>
+                                <tbody data-bind="template: { name: 'studentsTemplate', foreach: students }">
                                 </tbody>
+                                <script type="text/html" id="studentsTemplate">
+                                    <tr>
+                                        <td><input required type="text" readonly data-bind="value: index" /></td>
+                                        <td><input required type="text" data-bind="value: firstName" /></td>
+                                        <td><input required type="text" data-bind="value: lastName" /></td>
+                                        <td><input required type="date" data-bind="value: birthday" /></td>
+                                        <td class="action">
+                                            <a href="#grades" data-bind="click: $parent.showGrades">Zobacz oceny</a>
+                                            <button data-bind=" click: $parent.removeStudent" type="button">Usuń <i
+                                                    class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </script>
+
                             </table>
-                            <button type="button" name="addStudent">Dodaj studenta  <i class="fa fa-plus"></i></button>
+                            <button data-bind="click: addStudent" type="button" name="addStudent">Dodaj studenta <i
+                                    class="fa fa-plus"></i></button>
                         </form>
 
                     </article>
                     <article id="grades">
                         <form id="gradesForm">
                             <table>
-                                <caption><h2>Lista ocen:<br /> imie1 Nazwisko1</h2></caption>
+                                <caption>
+                                    <h2 data-bind="text: studentInfo">
+                                    </h2>
+                                </caption>
                                 <thead>
-                                <tr>
-                                    <th>Kurs</th>
-                                    <th>Data</th>
-                                    <th>Ocena</th>
-                                    <th class="action">Akcje:</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="filtr">
-                                    <td><input type="search" placeholder="Nazwa kursu" name="searchCourse"></td>
-                                    <td><input type="date"  name="gradeAddTimeMin" /><input type="date"  name="gradeAddTimeMax" /></td>
-                                    <td><input type="number" min="2" max="5" step="0.5"  value="2"name="gradeMin">
-                                        <input type="number" min="2" max="5" step="0.5"  value="5" name="gradeMax"></td>
-                                    <td class="action"><button type="button" name="searchGrade">Szukaj <i class="fa fa-search"></i> </button></td>
+                                    <tr>
+                                        <th>Kurs</th>
+                                        <th>Data</th>
+                                        <th>Ocena</th>
+                                        <th class="action">Akcje:</th>
+                                    </tr>
+                                    <tr class="filtr">
+                                        <td><input type="search" placeholder="Nazwa kursu" name="searchCourse"></td>
+                                        <td><input type="date" name="gradeAddTimeMin" /><input type="date"
+                                                name="gradeAddTimeMax" /></td>
+                                        <td><input type="number" min="2" max="5" step="0.5" value="2" name="gradeMin">
+                                            <input type="number" min="2" max="5" step="0.5" value="5" name="gradeMax">
+                                        </td>
+                                        <td class="action"><button type="button" name="searchGrade">Szukaj <i
+                                                    class="fa fa-search"></i> </button></td>
 
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <select>
-                                            <option value="kurs 1">Kurs 1</option>
-                                            <option value="kurs 2">Kurs 2</option>
-                                            <option value="kurs 3">Kurs 3</option>
-                                            <option value="kurs 4">Kurs 4</option>
-                                        </select>
-                                    </td>
-                                    <td><input required type="date" value="2020-03-03"/></td>
-                                    <td><input required type="number" value="2.0" min="2" max="5" step="0.5"/></td>
-                                    <td class="action">
-                                        <button type="button" >Usuń  <i class="fa fa-trash"></i></button>
-                                    </td>
-                                </tr>
+                                    </tr>
+                                </thead>
+
+                                <tbody data-bind="template: { name: 'gradesTemplate', foreach: grades }">
                                 </tbody>
+                                <script type="text/html" id="gradesTemplate">
+                                    <tr>
+                                        <td><select
+                                                data-bind="options: $root.courses, optionsText: 'name', optionsValue: 'id',  value: course.id"></select>
+                                        </td>
+                                        <td><input required type="date" data-bind="value: date" /></td>
+                                        <td><input required type="number" data-bind="value: value" min="2" max="5"
+                                                step="0.5" /></td>
+                                        <td class="action">
+                                            <button data-bind="click: $parent.removeGrade" type="button">Usuń <i
+                                                    class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </script>
                             </table>
-                            <button type="button" name="addGrade">Dodaj ocenę  <i class="fa fa-plus"></i></button>
+
+
+                            <button data-bind="click: addGrade" type="button" name="addGrade">Dodaj ocenę <i
+                                    class="fa fa-plus"></i></button>
                         </form>
                     </article>
                 </div>
@@ -169,4 +168,10 @@
         </footer>
     </div>
 </body>
+
+<script src="jquery-3.5.1.js"></script>
+<script src="knockout-3.5.0.js"></script>
+<script src="knockout.mapping-2.4.1.js"></script>
+<script src="main.js"></script>
+
 </html>

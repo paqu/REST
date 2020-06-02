@@ -1,5 +1,6 @@
 package com.paqu.rest;
 
+import com.paqu.rest.utils.CustomHeaders;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -18,6 +19,8 @@ public class Main {
         // JAX-RS resources and providers
         final ResourceConfig rc = new ResourceConfig().packages("com.paqu.rest");
         rc.register(DeclarativeLinkingFeature.class);
+        rc.register(CustomHeaders.class);
+
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }

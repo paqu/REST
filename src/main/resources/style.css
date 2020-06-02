@@ -1,29 +1,310 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
 
-@media print {
+body {
+    line-height: 1;
+    font-family: "Work Sans", sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+}
 
+ol,
+ul {
+    list-style: none;
+}
+
+i {
+    margin-left: 3px;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+h3 {
+    font-size: 1.8em;
+}
+
+h4 {
+    font-size: 1.5em;
+}
+
+h5 {
+    font-size: 1.2em;
+}
+
+h6 {
+    font-size: 1em;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#content {
+    flex: 1;
+}
+
+article {
+    display: none;
+}
+
+article:target {
+    display: block;
+    width: 100%;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input {
+    display: flex;
+    text-align: center;
+    outline: none;
+    border: transparent;
+    background: transparent;
+    width: 90%;
+}
+
+.filtr:hover {
+    background: transparent;
+}
+
+.filtr input {
+    padding: 10px;
+    background: #f1f1f1;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+
+}
+
+input:invalid {
+    background-color: pink;
+}
+
+button {
+    color: #000;
+    background: #fff;
+    padding: 5px 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin: 5px;
+}
+
+select {
+    padding: 5px 20px;
+    background: transparent;
+    border: transparent;
+}
+
+button:active {
+    border: 1px solid black;
+}
+
+table {
+    width: 90%;
+    min-width: 400px;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+
+table caption {
+    margin-bottom: 25px;
+}
+
+table tr {
+    min-height: 30px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+table thead tr {
+    border: 1px solid black;
+}
+
+table th {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+table td,
+th {
+    padding: 10px;
+    margin: auto;
+    min-width: 200px;
+    text-align: center;
+    flex: 1;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+tbody tr:hover {
+    color: #555555;
+    background-color: #83b1cc;
+    cursor: pointer;
+}
+
+#mainHeader,
+#mainFooter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+#mainHeader {
+    background: #ffffff;
+    margin-bottom: 10px;
+}
+
+#mainHeader h1,
+img {
+    padding: 10px;
+}
+
+#mainHeader img {
+    width: 150px;
+    height: 150px;
+}
+
+#mainFooter {
+    background: #84898c;
+    background-image: linear-gradient(#84898c, #818181);
+}
+
+#mainFooter p {
+    padding: 5px;
+    font-weight: bold;
+}
+
+#mainFooter a {
+    padding: 5px;
+    color: #fff;
+}
+
+#mainContent {
+    flex: 1;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#mainNav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-self: baseline;
+    background: #83b1cc;
+    margin-bottom: 20px;
+}
+
+#mainNav ul {
+    flex: 1;
+    min-width: 250px;
+}
+
+#mainNav li {
+    padding: 15px;
+    border-bottom: 1px solid #fff;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#mainNav li a {
+    color: #fff;
+    padding: 10px;
+}
+
+#views {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+}
+
+@media only print {
     * {
         padding: 0;
         margin: 0;
     }
 
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #mainContent {
+        flex: 0 0 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #mainHeader,
+    #mainNav,
+    #mainFooter,
+    .filtr,
+    .action {
+        display: none;
+    }
 
     select {
-        border:none;
-        background:transparent;
+        border: none;
+        background: transparent;
     }
+
     button {
         display: none;
     }
 
     input {
         border: none;
-        text-align:center;
+        text-align: center;
     }
 
-
-    td, th {
+    td,
+    th {
         border: 1px solid black;
-        text-align:center;
+        text-align: center;
         padding: 2px 5px;
     }
 
@@ -31,246 +312,26 @@
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-
     }
 
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
-    input[type=number] {
-        -moz-appearance:textfield; /* Firefox */
-    }
-}
 
-    * {
-        margin: 0px;
-        padding: 0px;
-        box-sizing: border-box;
+    input[type="number"] {
+        -moz-appearance: textfield;
+        /* Firefox */
     }
 
-    body {
-        line-height: 1;
-        font-family: "Work Sans", sans-serif;
-        font-weight: 300;
-        font-size: 16px;
-    }
-    ol, ul {
-        list-style: none;
-    }
-    i {
-        margin-left:3px;
-    }
-    a {
-        color: #000;
-        text-decoration: none;
-    }
-    a:hover {
-        text-decoration: underline;
-    }
-
-
-    h1, h2, h3, h4, h5, h6 {
-        font-family: Arial, sans-serif;
-    }
-    h1 { font-size: 2.5em }
-    h2 { font-size: 1.5em }
-    h3 { font-size: 1.8em }
-    h4 { font-size: 1.5em }
-    h5 { font-size: 1.2em }
-    h6 { font-size: 1.0em }
-
-    .container {
-        min-height: 100vh;
-        display:flex;
-        flex-direction: column;
-    }
-
-    #content {
-        flex: 1;
-    }
-
-/*
-    article {
-        display:none;
-    }
-    article:target {
-        display:block;
-    }
-*/
-#courses {
-    display:none;
-    }
-
-#students {
-    display:none;
- }
-
-#grades {
-    display: none;
-}
-
-#courses:target {
-    display:block;
-}
-
-#students:target {
-    display: block;
-}
-
-#grades:target {
-    display: block;
-}
-
-
-    input {
-        display: block;
-        text-align:center;
-        outline: none;
-        border: transparent;
-        background: transparent;
-
-    }
-    .filtr:hover {
-        background: transparent;
-    }
-    .filtr input {
-        padding:10px;
-        background: #f1f1f1;
-        border-radius: 10px;
-        margin-bottom:5px;
-        border: 1px solid #ccc;
-
-    }
-    input:invalid {
-      background-color: pink;
-    }
-
-    button {
-        color: #000;
-        background: #fff;
-        padding: 5px 20px;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        margin:5px;
-    }
-    select {
-        padding: 5px 20px;
-        background:transparent;
-        border: transparent;
-    }
-    button:active {
-        border:1px solid black;
-    }
-
-    table {
-        min-width:400px;
-        margin-bottom:5px;
-    }
-    table caption {
-        margin-bottom:25px;
-    }
-    table tr {
-        min-height: 30px;
-        display:flex;
-        flex-wrap:wrap;
-    }
-    table thead tr {
-      border: 1px solid black;
-    }
-
-    table th {
-        font-size: 1.2em;
-        font-weight:bold;
-        text-transform: uppercase;
-    }
-
-    table td, th {
-        padding: 10px;
-        margin: auto;
-        min-width:200px;
-        text-align:center;
-        flex:1
-    }
     tbody tr:nth-child(even) {
-      background-color: #f5f5f5;
+        background-color: #fff;
+        color: #000;
     }
+
     tbody tr:hover {
-      color: #555555;
-      background-color: #83B1CC;
-      cursor: pointer;
+        background-color: #fff;
+        color: #000;
     }
-
-
-    #mainHeader, #mainFooter {
-        display: flex;
-        flex-direction:column;
-        align-items: center;
-        padding: 20px;
-    }
-
-    #mainHeader {
-        background: #ffffff;
-        margin-bottom:10px;
-    }
-    #mainHeader h1, img {
-       padding:10px;
-    }
-    #mainHeader img{
-        width:150px;
-        height:150px;
-    }
-    #mainFooter {
-        background: #84898C;
-        background-image: linear-gradient(#84898C, #818181);
-    }
-    #mainFooter p{
-        padding: 5px;
-        font-weight:bold;
-    }
-    #mainFooter a{
-        padding: 5px;
-        color: #fff;
-    }
-    #mainContent {
-        flex: 1;
-    }
-    .row {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-
-    }
-    #mainNav {
-        flex: 1;
-        display:flex;
-        justify-content:center;
-        align-self: baseline;
-        background: #83B1CC;
-        margin-bottom:20px;
-    }
-    #mainNav ul {
-        flex: 1;
-        min-width:250px;
-    }
-    #mainNav li {
-        padding: 15px;
-        border-bottom: 1px solid #fff;
-        text-align:center;
-        text-transform: uppercase;
-
-    }
-    #mainNav li a {
-        color: #fff;
-        padding: 10px;
-    }
-
-    #views {
-        flex: 3;
-        display:flex;
-        justify-content:center;
-    }
-
-
 }
