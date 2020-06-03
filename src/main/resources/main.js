@@ -2,170 +2,8 @@
 
 /* TODO
 - ujednolic sposob zapytan do servera ajax -> fetch
+- pozbyc sie duplikacji w subscribe
 */
-
-function viewModel(courses, students) {
-  self = this;
-  self.courses = ko.mapping.fromJS(courses);
-  self.students = ko.mapping.fromJS(students);
-  self.studentInfo = ko.observable();
-  self.grades = ko.mapping.fromJS([]);
-
-  self.removeCourse = function (course) {
-    console.log("removed course:");
-    console.log(ko.toJS(course));
-
-    let url = "http://localhost:1234/courses/" + course.id();
-
-    $.ajax({
-      type: "DELETE",
-      url: url,
-      contentType: "application/json",
-      dataType: "json",
-    }).then((data) => {
-      self.courses.remove(course);
-    });
-  };
-
-  self.addCourse = async function () {
-    console.log("add course");
-    let location;
-    let url = "http://localhost:1234/courses";
-
-    let course = {
-      name: "new course",
-      lecturer: "lecturer",
-    };
-
-    location = await postData(url, course);
-    console.log(location);
-    course = await getData(location);
-
-    self.courses.push(ko.mapping.fromJS(course));
-  };
-
-  self.removeStudent = function (student) {
-    console.log("removed student");
-    console.log(ko.toJS(student));
-    let url = "http://localhost:1234/students/" + student.index();
-    $.ajax({
-      type: "DELETE",
-      url: url,
-      contentType: "application/json",
-      dataType: "json",
-    }).then((data) => {
-      self.students.remove(student);
-    });
-  };
-
-  self.addStudent = async function () {
-    console.log("add student");
-    let location;
-    let url = "http://localhost:1234/students";
-
-    let student = {
-      firstName: "name",
-      lastName: "lastname",
-      birthday: getDate(),
-    };
-
-    location = await postData(url, student);
-    console.log(location);
-    student = await getData(location);
-
-    self.students.push(ko.mapping.fromJS(student));
-  };
-
-  self.addGrade = async function () {
-    console.log("add grade");
-    let location;
-    let url =
-      "http://localhost:1234/students/" +
-      self.studentInfo().split(",")[0] +
-      "/grades";
-
-    let grade = {
-      course: ko.toJS(self.courses()[0]),
-      date: getDate(),
-      value: 5,
-    };
-
-    location = await postData(url, grade);
-    console.log(location);
-    grade = await getData(location);
-
-    self.grades.push(ko.mapping.fromJS(grade));
-  };
-
-  self.removeGrade = async function (grade) {
-    console.log("remove grade");
-    console.log(ko.toJS(grade));
-
-    let url =
-      "http://localhost:1234/students/" +
-      self.studentInfo().split(",")[0] +
-      "/grades/" +
-      grade.id();
-
-    $.ajax({
-      type: "DELETE",
-      url: url,
-      contentType: "application/json",
-      dataType: "json",
-    }).then((data) => {
-      self.grades.remove(grade);
-    });
-  };
-
-  self.showGrades = function (student) {
-    let info;
-    info =
-      student.index() +
-      ", " +
-      student.firstName() +
-      ", " +
-      student.lastName() +
-      ", " +
-      student.birthday();
-
-    self.studentInfo(info);
-
-    let url = "http://localhost:1234/students/" + student.index() + "/grades";
-
-    $.ajax({
-      url: url,
-      dataType: "json",
-    }).then((data) => {
-      console.log(data);
-      ko.mapping.fromJS(data, self.grades);
-    });
-    return true;
-  };
-}
-
-let courses = [],
-  students = [];
-
-$.ajax({
-  url: "http://localhost:1234/courses",
-  dataType: "json",
-}).then((data) => {
-  courses = data;
-  $.ajax({
-    url: "http://localhost:1234/students",
-    dataType: "json",
-  }).then((data) => {
-    students = data;
-
-    var vm = new viewModel(courses, students);
-
-    var subscription = vm.courses.subscribe(function (newValue) {
-      console.log("subskrypcja");
-      console.log(newValue);
-    });
-    ko.applyBindings(vm);
-  });
-});
 
 function getDate() {
   let date = new Date();
@@ -209,22 +47,283 @@ async function postData(url, data) {
 
   throw new Error(response.status);
 }
-//});
 
-/*
-async function getData(url) {
-    let response = await fetch(url, {
-        headers: {
-            accept: 'application/json'
+function event(a) {
+  let data = ko.mapping.toJS(this);
+
+  let url = "http://localhost:1234" + data.link[0].href;
+  $.ajax({
+    type: "PUT",
+    url: url,
+    data: JSON.stringify(data),
+    contentType: "application/json",
+    dataType: "json",
+  }).then((data) => {
+    console.log("updated");
+  });
+  console.log("Change !!");
+}
+/******************************************************
+ *
+ * VIEW MODEL
+ */
+
+function viewModel() {
+  self = this;
+
+  self.courses = ko.observableArray();
+  self.students = ko.observableArray();
+  self.grades = ko.observableArray();
+
+  self.studentInfo = ko.observable();
+
+  self.coursesSub = new Map();
+  self.studentsSub = new Map();
+  self.gradesSub = new Map();
+  /******************************************************
+   *
+   * SUBSCRIBE
+   */
+
+  self.courses.subscribe(
+    function (changes) {
+      changes.forEach(function (change) {
+        if (change.status === "added") {
+          console.log("new course sub !!");
+
+          let sub = ko
+            .computed(function () {
+              return ko.toJSON(change.value);
+            })
+            .subscribe(event.bind(change.value));
+          self.coursesSub.set(change.value.id(), sub);
+        } else if (change.status === "deleted") {
+          console.log("deleted  course sub !!");
+
+          let sub = self.coursesSub.get(change.value.id());
+          sub.dispose();
+          self.coursesSub.delete(change.value.id());
         }
+      });
+    },
+    null,
+    "arrayChange"
+  );
+
+  self.students.subscribe(
+    function (changes) {
+      changes.forEach(function (change) {
+        if (change.status === "added") {
+          console.log("new student sub !!");
+
+          let sub = ko
+            .computed(function () {
+              return ko.toJSON(change.value);
+            })
+            .subscribe(event.bind(change.value));
+          self.studentsSub.set(change.value.index(), sub);
+        } else if (change.status === "deleted") {
+          console.log("deleted student sub !!");
+
+          let sub = self.studentsSub.get(change.value.index());
+          sub.dispose();
+          self.studentsSub.delete(change.value.index());
+        }
+      });
+    },
+    null,
+    "arrayChange"
+  );
+
+  self.grades.subscribe(
+    function (changes) {
+      changes.forEach(function (change) {
+        if (change.status === "added") {
+          console.log("new grade sub !!");
+
+          let sub = ko
+            .computed(function () {
+              return ko.toJSON(change.value);
+            })
+            .subscribe(event.bind(change.value));
+          self.gradesSub.set(change.value.id(), sub);
+        } else if (change.status === "deleted") {
+          console.log("deleted grade sub !!");
+          let sub = self.gradesSub.get(change.value.id());
+          sub.dispose();
+          self.gradesSub.delete(change.value.id());
+        }
+      });
+    },
+    null,
+    "arrayChange"
+  );
+
+  /******************************************************
+   *
+   * COURSES
+   */
+
+  self.removeCourse = function (course) {
+    console.log("removed course:");
+    console.log(ko.toJS(course));
+
+    let url = "http://localhost:1234/courses/" + course.id();
+
+    $.ajax({
+      type: "DELETE",
+      url: url,
+      contentType: "application/json",
+      dataType: "json",
+    }).then((data) => {
+      self.courses.remove(course);
     });
-    if (response.status == 200) {
-        console.log(response)
-        let json = await response.json();
-        return json;
-    }
-    throw new Error(response.status);
+  };
+
+  self.addCourse = async function () {
+    console.log("add course");
+    let location;
+    let url = "http://localhost:1234/courses";
+
+    let course = {
+      name: "new course",
+      lecturer: "lecturer",
+    };
+
+    location = await postData(url, course);
+    console.log(location);
+    course = await getData(location);
+
+    self.courses.push(ko.mapping.fromJS(course));
+  };
+
+  /******************************************************
+   *
+   * STUDENTS
+   */
+
+  self.removeStudent = function (student) {
+    console.log("removed student");
+    console.log(ko.toJS(student));
+
+    let url = "http://localhost:1234/students/" + student.index();
+    $.ajax({
+      type: "DELETE",
+      url: url,
+      contentType: "application/json",
+      dataType: "json",
+    }).then((data) => {
+      self.students.remove(student);
+    });
+  };
+
+  self.addStudent = async function () {
+    console.log("add student");
+    let location;
+    let url = "http://localhost:1234/students";
+
+    let student = {
+      firstName: "name",
+      lastName: "lastname",
+      birthday: getDate(),
+    };
+
+    location = await postData(url, student);
+    console.log(location);
+    student = await getData(location);
+
+    self.students.push(ko.mapping.fromJS(student));
+  };
+
+  /******************************************************
+   *
+   * GRADES
+   */
+  self.addGrade = async function () {
+    console.log("add grade");
+    let location;
+    let url =
+      "http://localhost:1234/students/" +
+      self.studentInfo().split(",")[0] +
+      "/grades";
+    /*
+    var unmapped = ko.mapping.toJS(self.courses()[0]);
+    console.log(unmapped);
+*/
+    let grade = {
+      course: {
+        id: self.courses()[0].id(),
+        name: self.courses()[0].name(),
+        lecturer: self.courses()[0].lecturer(),
+      },
+      date: getDate(),
+      value: 5,
+    };
+
+    location = await postData(url, grade);
+    console.log(location);
+    grade = await getData(location);
+
+    self.grades.push(ko.mapping.fromJS(grade));
+  };
+
+  self.removeGrade = async function (grade) {
+    console.log("remove grade");
+    console.log(ko.toJS(grade));
+
+    let url =
+      "http://localhost:1234/students/" +
+      self.studentInfo().split(",")[0] +
+      "/grades/" +
+      grade.id();
+
+    $.ajax({
+      type: "DELETE",
+      url: url,
+      contentType: "application/json",
+      dataType: "json",
+    }).then((data) => {
+      self.grades.remove(grade);
+    });
+  };
+
+  self.showGrades = function (student) {
+    let info =
+      student.index() +
+      ", " +
+      student.firstName() +
+      ", " +
+      student.lastName() +
+      ", " +
+      student.birthday();
+
+    self.studentInfo(info);
+
+    let url = "http://localhost:1234/students/" + student.index() + "/grades";
+
+    getData(url).then((data) => {
+      self.grades.removeAll();
+      data.forEach((grade) => {
+        self.grades.push(ko.mapping.fromJS(grade));
+      });
+    });
+
+    return true;
+  };
 }
 
-let x = getData("http://localhost:1234/students").then(data => console.log(data)).catch(alert);
-*/
+let vm = new viewModel();
+
+getData("http://localhost:1234/courses").then((data) => {
+  data.forEach((course) => {
+    vm.courses.push(ko.mapping.fromJS(course));
+  });
+});
+
+getData("http://localhost:1234/students").then((data) => {
+  data.forEach((student) => {
+    vm.students.push(ko.mapping.fromJS(student));
+  });
+});
+
+ko.applyBindings(vm);
