@@ -39,8 +39,8 @@
                                         <th class="action">Akcja</th>
                                     </tr>
                                     <tr class="filtr">
-                                        <td><input type="search" placeholder="Nazwa kursu" name="searchCourse" /></td>
-                                        <td><input type="search" placeholder="Prowadzący" name="searchLecturer" /></td>
+                                        <td><input data-bind="textInput:filterCourseName" type="search" placeholder="Nazwa kursu" name="searchCourse" /></td>
+                                        <td><input data-bind="textInput:filterCourseLecturer" type="search" placeholder="Prowadzący" name="searchLecturer" /></td>
                                         <td class="action"><button type="button" name="courseSearch">Szukaj <i
                                                     class="fa fa-search"></i></button></td>
                                     </tr>

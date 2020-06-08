@@ -77,6 +77,36 @@ function viewModel() {
 
   self.studentInfo = ko.observable();
 
+  self.filterCourseName = ko.observable("");
+  self.filterCourseName.subscribe(function(courseName){
+    let lecturer = "lecturer=" + self.filterCourseLecturer();
+    let course = "name=" + courseName;
+
+    let url = "http://localhost:1234/courses?" + course + "&" + lecturer;
+
+    getData(url).then((data) => {
+      self.courses.removeAll();
+      data.forEach((course) => {
+        self.courses.push(ko.mapping.fromJS(course));
+      });
+    });
+  });
+
+  self.filterCourseLecturer = ko.observable("");
+  self.filterCourseLecturer.subscribe(function(lecturerName){
+    let course = "name=" + self.filterCourseName();
+    let lecturer = "lecturer=" + lecturerName;
+
+    let url = "http://localhost:1234/courses?" + course + "&" + lecturer;
+
+    getData(url).then((data) => {
+      self.courses.removeAll();
+      data.forEach((course) => {
+        self.courses.push(ko.mapping.fromJS(course));
+      });
+    });
+  });
+
   self.coursesSub = new Map();
   self.studentsSub = new Map();
   self.gradesSub = new Map();
