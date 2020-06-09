@@ -5,6 +5,8 @@ import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import dev.morphia.query.Query;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -166,11 +168,35 @@ public class LocalDatabase {
     }
     */
 
-    public Collection<Student> getStudents() {
+    private Collection<Student> getStudents() {
         List<Student> studentList = database.createQuery(Student.class).find().toList();
         return studentList;
     }
+    public Collection<Student> getStudents(
+                                           String firstName,
+                                           String lastName,
+                                           String birthday,
+                                           int birthdayCompare) throws ParseException {
 
+
+        Query<Student> query = database.createQuery(Student.class)
+                .field("firstName").containsIgnoreCase(firstName)
+                .field("lastName").containsIgnoreCase(lastName);
+
+        if (birthday != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date birthDate = formatter.parse(birthday);
+            if (birthdayCompare == 1)
+                query.field("birthday").greaterThanOrEq(birthDate);
+            else if (birthdayCompare == 0)
+                query.field("birthday").equal(birthDate);
+            else if (birthdayCompare == -1)
+                query.field("birthday").lessThanOrEq(birthDate);
+        }
+
+        List<Student> studentsList = query.find().toList();
+        return studentsList;
+    }
 /*
     public Student updateStudent(int index, Student update)
     {

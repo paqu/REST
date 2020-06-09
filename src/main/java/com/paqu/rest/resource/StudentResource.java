@@ -4,17 +4,10 @@ import com.paqu.rest.model.LocalDatabase;
 import com.paqu.rest.model.Student;
 
 import java.net.URI;
+import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 
@@ -70,7 +63,11 @@ public class StudentResource {
 
     @GET
     @Produces({"application/xml", "application/json"})
-    public Collection<Student> getStudents() {
-        return LocalDatabase.getInstance().getStudents();
+    public Collection<Student> getStudents(
+                                           @DefaultValue("") @QueryParam("firstName") String firstName,
+                                           @DefaultValue("") @QueryParam("lastName") String lastName,
+                                           /*@DefaultValue("")*/ @QueryParam("birthday") String birthday,
+                                           @DefaultValue("0") @QueryParam("birthdayCompare") int birthdayCompare) throws ParseException {
+        return LocalDatabase.getInstance().getStudents(firstName, lastName, birthday, birthdayCompare);
     }
 }
