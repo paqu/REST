@@ -119,7 +119,7 @@ public class GradeResource {
                               @QueryParam("dateCompare") int dateCompare) throws ParseException {
         Student student = LocalDatabase.getInstance().getStudent(index);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
-        System.out.println(courseId_);
+
         int courseId = 0;
         try {
             courseId = Integer.parseInt(courseId_);
