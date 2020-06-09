@@ -78,8 +78,8 @@
                                     </tr>
                                     <tr class="filtr">
                                         <td><input type="search" placeholder="Indeks" name="searchIndex" /></td>
-                                        <td><input type="search" placeholder="Imię" name="searchFirstName" /></td>
-                                        <td><input type="search" placeholder="Nazwisko" name="searchLastName" /></td>
+                                        <td><input data-bind="textInput:filterFirstName"type="search" placeholder="Imię" name="searchFirstName" /></td>
+                                        <td><input data-bind="textInput:filterLastName"type="search" placeholder="Nazwisko" name="searchLastName" /></td>
                                         <td><input type="date" name="searchDateBirthMin" /><input type="date"
                                                 name="searchDateBirthMax" /></td>
                                         <td class="action"><button type="button" name="searchStudent">Szukaj <i

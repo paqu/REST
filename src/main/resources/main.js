@@ -7,7 +7,7 @@
 
 function getDate() {
   let date = new Date();
-  let day = date.getDay();
+  let day = date.getDate();
   let month = date.getMonth() + 1;
   let year = date.getFullYear();
 
@@ -78,6 +78,11 @@ function viewModel() {
   self.studentInfo = ko.observable();
 
   self.filterCourseName = ko.observable("");
+  self.filterCourseLecturer = ko.observable("");
+  self.filterFirstName = ko.observable("");
+  self.filterLastName = ko.observable("");
+
+
   self.filterCourseName.subscribe(function(courseName){
     let lecturer = "lecturer=" + self.filterCourseLecturer();
     let course = "name=" + courseName;
@@ -92,7 +97,6 @@ function viewModel() {
     });
   });
 
-  self.filterCourseLecturer = ko.observable("");
   self.filterCourseLecturer.subscribe(function(lecturerName){
     let course = "name=" + self.filterCourseName();
     let lecturer = "lecturer=" + lecturerName;
@@ -106,6 +110,34 @@ function viewModel() {
       });
     });
   });
+
+  self.filterFirstName.subscribe(function(firstNameVal){
+    let firstName = "firstName=" + firstNameVal;
+    let lastName  = "lastName=" + self.filterLastName();
+
+    let url = "http://localhost:1234/students?" + firstName + "&" + lastName;
+
+    getData(url).then((data) => {
+      self.students.removeAll();
+      data.forEach((student) => {
+        self.students.push(ko.mapping.fromJS(student));
+      });
+    });
+  });
+
+  self.filterLastName.subscribe(function(lastNameVal){
+      let firstName  = "firstName=" + self.filterFirstName();
+      let lastName = "lastName=" + lastNameVal;
+
+      let url = "http://localhost:1234/students?" + firstName + "&" + lastName;
+
+      getData(url).then((data) => {
+        self.students.removeAll();
+        data.forEach((student) => {
+          self.students.push(ko.mapping.fromJS(student));
+        });
+      });
+    });
 
   self.coursesSub = new Map();
   self.studentsSub = new Map();
