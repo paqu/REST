@@ -6,16 +6,11 @@ import com.paqu.rest.model.Grade;
 import com.paqu.rest.model.Course;
 
 import java.net.URI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
+import java.util.stream.Collectors;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 
@@ -116,11 +111,70 @@ public class GradeResource {
 
     @GET
     @Produces({ "application/xml", "application/json"})
-    public Collection<Grade> getStudents(@PathParam("index") int index) {
+    public Response getGrades(@PathParam("index") int index,
+                              @DefaultValue("0") @QueryParam("course") String courseId_,
+                              @DefaultValue("-1") @QueryParam("value") float value,
+                              @QueryParam("valueCompare") int valueCompare,
+                              @QueryParam("date") String date,
+                              @QueryParam("dateCompare") int dateCompare) throws ParseException {
         Student student = LocalDatabase.getInstance().getStudent(index);
         if (student == null) throw new WebApplicationException(Response.Status.NOT_FOUND);
+        System.out.println(courseId_);
+        int courseId = 0;
+        try {
+            courseId = Integer.parseInt(courseId_);
+        } catch (Exception e) {
+            return Response.ok(new ArrayList<Grade>()).build();
 
-        List<Grade> gradeList = new ArrayList<Grade>(student.getGrades());
-        return gradeList;
+        }
+        List<Grade> gradesList = new ArrayList<Grade>(student.getGrades());
+
+        if (courseId != 0) {
+            int finalCourseId = courseId;
+            gradesList = gradesList.stream()
+                    .filter(grade -> grade.getCourse().getId() == finalCourseId)
+                    .collect(Collectors.toList());
+        }
+        if (value >= 0) {
+            if (valueCompare == 1) {
+                gradesList = gradesList.stream()
+                        .filter(grade -> grade.getValue() > value)
+                        .collect(Collectors.toList());
+            } else if (valueCompare == 0) {
+                gradesList = gradesList.stream()
+                        .filter(grade -> grade.getValue() == value)
+                        .collect(Collectors.toList());
+            } else if (valueCompare == -1) {
+                gradesList = gradesList.stream()
+                        .filter(grade -> grade.getValue() <= value)
+                        .collect(Collectors.toList());
+            } else
+                return Response.status(400).build();
+        }
+
+        if (date != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date gradeDate = formatter.parse(date);
+
+            if (dateCompare == 1){
+                gradesList = gradesList.stream()
+                        .filter(grade -> grade.getDate().after(gradeDate))
+                        .collect(Collectors.toList());
+            }
+            else if (dateCompare == 0){
+                gradesList = gradesList.stream()
+                        .filter(grade -> grade.getDate().equals(gradeDate))
+                        .collect(Collectors.toList());
+            }
+            else if (dateCompare == -1){
+                gradesList = gradesList.stream()
+                        .filter(grade -> grade.getDate().before(gradeDate))
+                        .collect(Collectors.toList());
+            }
+            else
+                return Response.status(400).build();
+        }
+
+        return Response.ok(gradesList).build();
     }
 }
