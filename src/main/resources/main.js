@@ -101,15 +101,28 @@ function viewModel() {
   self.filterGradeDate = ko.observable("");
   self.selectedGradeDateCompare = ko.observable(-1);
 
+    self.gradeValueCompare = ko.observableArray([
+      { value: -1, text: "mniejsza"},
+      { value:  0, text: "równa"},
+      { value:  1, text: "większa"},
+    ]);
+
+      self.selectedGradeValueCompare = ko.observable(-1);
+      self.filterGradeValue = ko.observable(5);
+
+
   function filterCourseInGrade(id) {
     let url = "http://localhost:1234/students/" + self.studentInfo().split(",")[0] + "/grades?";
 
     let courseId  = self.selectedCourseId() ? "course=" + self.selectedCourseId() : "";
     let gradeDate = self.filterGradeDate() ? "&date=" + self.filterGradeDate()   : "";
     let selectedGradeDateCompare =
-        self.selectedGradeDateCompare() ? "&dateCompare=" + self.selectedBirthdayCompare() : "";
+        self.selectedGradeDateCompare() ? "&dateCompare=" + self.selectedGradeDateCompare() : "";
+    let gradeValue = self.filterGradeValue() ? "&value=" + self.filterGradeValue()   : "";
+    let selectedGradeValueCompare =
+        self.selectedGradeValueCompare() ? "&valueCompare=" + self.selectedGradeValueCompare() : "";
 
-    url += courseId + gradeDate + selectedGradeDateCompare;
+    url += courseId + gradeDate + selectedGradeDateCompare + gradeValue + selectedGradeValueCompare;
 
     getData(url).then((data) => {
       self.grades.removeAll();
@@ -134,6 +147,16 @@ function viewModel() {
 
     });
 
+    self.filterGradeValue.subscribe(function() {
+        filterCourseInGrade();
+
+    });
+    self.filterGradeValue.extend({ rateLimit: 100 });
+
+    self.selectedGradeValueCompare.subscribe(function(){
+          filterCourseInGrade();
+
+    });
 
   function filterCourse() {
     let course = self.filterCourseName() ? "name=" + self.filterCourseName() : "";
