@@ -87,7 +87,7 @@
                                                                value:selectedBirthdayCompare,
                                                                "></select> </p>
                                             <input data-bind="value:filterBirthday" type="date" name="searchDateBirthMin" />
-
+                                        </td>
 
                                         <td class="action"><button type="button" name="searchStudent">Szukaj <i
                                                     class="fa fa-search"></i> </button></td>
@@ -136,8 +136,13 @@
                                                  optionsValue: 'id',
                                                  value: selectedCourseId,
                                                  optionsCaption: 'Wszystkie'"></select></td>
-                                        <td><input type="date" name="gradeAddTimeMin" /><input type="date"
-                                                name="gradeAddTimeMax" /></td>
+                                        <td><p>Wybierz przedział:<select data-bind="options: gradeDateCompare,
+                                                               optionsText: 'text',
+                                                               optionsValue: 'value',
+                                                               value:selectedGradeDateCompare,
+                                                               "></select> </p>
+                                            <input data-bind="value:filterGradeDate" type="date"  />
+                                        </td>
                                         <td><input type="number" min="2" max="5" step="0.5" value="2" name="gradeMin">
                                             <input type="number" min="2" max="5" step="0.5" value="5" name="gradeMax">
                                         </td>

@@ -138,7 +138,7 @@ public class GradeResource {
         if (value >= 0) {
             if (valueCompare == 1) {
                 gradesList = gradesList.stream()
-                        .filter(grade -> grade.getValue() > value)
+                        .filter(grade -> grade.getValue() >= value)
                         .collect(Collectors.toList());
             } else if (valueCompare == 0) {
                 gradesList = gradesList.stream()
