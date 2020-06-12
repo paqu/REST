@@ -92,14 +92,11 @@ function viewModel() {
   ]);
 
 
+  function filterCourse() {
+    let course = self.filterCourseName() ? "name=" + self.filterCourseName() : "";
+    let lecturer = self.filterCourseLecturer() ? "&lecturer=" + self.filterCourseLecturer() : "";
 
-  self.filterCourseName.subscribe(function(courseName){
-    let lecturer = "lecturer=" + self.filterCourseLecturer();
-    let course = "name=" + courseName;
-
-
-    let url = "http://localhost:1234/courses?" + course + "&" + lecturer;
-
+    let url = "http://localhost:1234/courses?" + course + lecturer;
 
     getData(url).then((data) => {
       self.courses.removeAll();
@@ -107,21 +104,7 @@ function viewModel() {
         self.courses.push(ko.mapping.fromJS(course));
       });
     });
-  });
-
-  self.filterCourseLecturer.subscribe(function(lecturerName){
-    let course = "name=" + self.filterCourseName();
-    let lecturer = "lecturer=" + lecturerName;
-
-    let url = "http://localhost:1234/courses?" + course + "&" + lecturer;
-
-    getData(url).then((data) => {
-      self.courses.removeAll();
-      data.forEach((course) => {
-        self.courses.push(ko.mapping.fromJS(course));
-      });
-    });
-  });
+  }
 
   function filterStudent() {
       let firstName = self.filterFirstName() ? "firstName=" + self.filterFirstName() : "";
@@ -139,6 +122,14 @@ function viewModel() {
         });
       });
   }
+
+  self.filterCourseName.subscribe(function(){
+    filterCourse();
+  });
+
+  self.filterCourseLecturer.subscribe(function(){
+    filterCourse()
+  });
 
   self.filterFirstName.subscribe(function(){
     filterStudent();
