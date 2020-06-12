@@ -130,7 +130,12 @@
                                         <th class="action">Akcje:</th>
                                     </tr>
                                     <tr class="filtr">
-                                        <td><input type="search" placeholder="Nazwa kursu" name="searchCourse"></td>
+                                        <td><select
+                                                data-bind="options: $root.courses,
+                                                 optionsText: 'name',
+                                                 optionsValue: 'id',
+                                                 value: selectedCourseId,
+                                                 optionsCaption: 'Wszystkie'"></select></td>
                                         <td><input type="date" name="gradeAddTimeMin" /><input type="date"
                                                 name="gradeAddTimeMax" /></td>
                                         <td><input type="number" min="2" max="5" step="0.5" value="2" name="gradeMin">

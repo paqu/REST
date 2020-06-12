@@ -91,6 +91,29 @@ function viewModel() {
     { value:  1, text: "większa"},
   ]);
 
+  self.selectedCourseId = ko.observable();
+
+  function filterCourseInGrade(id) {
+    let url = "http://localhost:1234/students/" + self.studentInfo().split(",")[0] + "/grades";
+
+    if (id != undefined) {
+        url += "?course=" + id;
+        console.log(url);
+    }
+    //let courseName = ""//self.filterCourseNameInGrade() ? "course=" + self.filterCourseNameInGrade() : "";
+      //+ courseName;
+
+    getData(url).then((data) => {
+      self.grades.removeAll();
+      data.forEach((grade) => {
+          self.grades.push(ko.mapping.fromJS(grade));
+      });
+    });
+  }
+  self.selectedCourseId.subscribe(function(id){
+    console.log(id);
+    filterCourseInGrade(id);
+  })
 
   function filterCourse() {
     let course = self.filterCourseName() ? "name=" + self.filterCourseName() : "";
