@@ -82,12 +82,24 @@ function viewModel() {
   self.filterFirstName = ko.observable("");
   self.filterLastName = ko.observable("");
 
+  self.filterBirthday = ko.observable("");
+  self.selectedBirthdayCompare = ko.observable(-1);
+
+  self.birthdayCompare = ko.observableArray([
+    { value: -1, text: "mniejsza"},
+    { value:  0, text: "równa"},
+    { value:  1, text: "większa"},
+  ]);
+
+
 
   self.filterCourseName.subscribe(function(courseName){
     let lecturer = "lecturer=" + self.filterCourseLecturer();
     let course = "name=" + courseName;
 
+
     let url = "http://localhost:1234/courses?" + course + "&" + lecturer;
+
 
     getData(url).then((data) => {
       self.courses.removeAll();
@@ -111,25 +123,14 @@ function viewModel() {
     });
   });
 
-  self.filterFirstName.subscribe(function(firstNameVal){
-    let firstName = "firstName=" + firstNameVal;
-    let lastName  = "lastName=" + self.filterLastName();
+  function filterStudent() {
+      let firstName = self.filterFirstName() ? "firstName=" + self.filterFirstName() : "";
+      let lastName  = self.filterLastName()  ? "&lastName="  + self.filterLastName() : "";
+      let birthday  = self.filterBirthday() ? "&birthday=" + self.filterBirthday()   : "";
+      let selectedBirthdayCompare =
+          self.selectedBirthdayCompare() ? "&birthdayCompare=" + self.selectedBirthdayCompare() : "";
 
-    let url = "http://localhost:1234/students?" + firstName + "&" + lastName;
-
-    getData(url).then((data) => {
-      self.students.removeAll();
-      data.forEach((student) => {
-        self.students.push(ko.mapping.fromJS(student));
-      });
-    });
-  });
-
-  self.filterLastName.subscribe(function(lastNameVal){
-      let firstName  = "firstName=" + self.filterFirstName();
-      let lastName = "lastName=" + lastNameVal;
-
-      let url = "http://localhost:1234/students?" + firstName + "&" + lastName;
+      let url = "http://localhost:1234/students?" + firstName + lastName + birthday + selectedBirthdayCompare;
 
       getData(url).then((data) => {
         self.students.removeAll();
@@ -137,7 +138,24 @@ function viewModel() {
           self.students.push(ko.mapping.fromJS(student));
         });
       });
-    });
+  }
+
+  self.filterFirstName.subscribe(function(){
+    filterStudent();
+  });
+
+  self.filterLastName.subscribe(function(){
+    filterStudent();
+  });
+
+  self.filterBirthday.subscribe(function() {
+    filterStudent();
+  });
+  self.filterBirthday.extend({ rateLimit: 500 });
+
+  self.selectedBirthdayCompare.subscribe(function(){
+    filterStudent()
+  });
 
   self.coursesSub = new Map();
   self.studentsSub = new Map();

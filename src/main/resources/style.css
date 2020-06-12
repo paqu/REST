@@ -81,7 +81,7 @@ article:target {
     width: 100%;
 }
 
-select {
+select:not(p >) {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;

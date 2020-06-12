@@ -77,11 +77,18 @@
                                         <th class="action">Akcje</th>
                                     </tr>
                                     <tr class="filtr">
-                                        <td><input type="search" placeholder="Indeks" name="searchIndex" /></td>
+                                        <td></td>
                                         <td><input data-bind="textInput:filterFirstName"type="search" placeholder="Imię" name="searchFirstName" /></td>
                                         <td><input data-bind="textInput:filterLastName"type="search" placeholder="Nazwisko" name="searchLastName" /></td>
-                                        <td><input type="date" name="searchDateBirthMin" /><input type="date"
-                                                name="searchDateBirthMax" /></td>
+                                        <td><p>Wybierz przedział:<select data-bind="options: birthdayCompare,
+                                                               optionsText: 'text',
+                                                               optionsValue: 'value',
+
+                                                               value:selectedBirthdayCompare,
+                                                               "></select> </p>
+                                            <input data-bind="value:filterBirthday" type="date" name="searchDateBirthMin" />
+
+
                                         <td class="action"><button type="button" name="searchStudent">Szukaj <i
                                                     class="fa fa-search"></i> </button></td>
                                     </tr>
