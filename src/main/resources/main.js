@@ -86,81 +86,96 @@ function viewModel() {
   self.selectedBirthdayCompare = ko.observable(-1);
 
   self.birthdayCompare = ko.observableArray([
-    { value: -1, text: "mniejsza"},
-    { value:  0, text: "równa"},
-    { value:  1, text: "większa"},
+    { value: -1, text: "mniejsza" },
+    { value: 0, text: "równa" },
+    { value: 1, text: "większa" },
   ]);
 
   self.selectedCourseId = ko.observable();
 
   self.gradeDateCompare = ko.observableArray([
-    { value: -1, text: "mniejsza"},
-    { value:  0, text: "równa"},
-    { value:  1, text: "większa"},
+    { value: -1, text: "mniejsza" },
+    { value: 0, text: "równa" },
+    { value: 1, text: "większa" },
   ]);
   self.filterGradeDate = ko.observable("");
   self.selectedGradeDateCompare = ko.observable(-1);
 
-    self.gradeValueCompare = ko.observableArray([
-      { value: -1, text: "mniejsza"},
-      { value:  0, text: "równa"},
-      { value:  1, text: "większa"},
-    ]);
+  self.gradeValueCompare = ko.observableArray([
+    { value: -1, text: "mniejsza" },
+    { value: 0, text: "równa" },
+    { value: 1, text: "większa" },
+  ]);
 
-      self.selectedGradeValueCompare = ko.observable(-1);
-      self.filterGradeValue = ko.observable(5);
-
+  self.selectedGradeValueCompare = ko.observable(-1);
+  self.filterGradeValue = ko.observable(5);
 
   function filterCourseInGrade(id) {
-    let url = "http://localhost:1234/students/" + self.studentInfo().split(",")[0] + "/grades?";
+    let url =
+      "http://localhost:1234/students/" +
+      self.studentInfo().split(",")[0] +
+      "/grades?";
 
-    let courseId  = self.selectedCourseId() ? "course=" + self.selectedCourseId() : "";
-    let gradeDate = self.filterGradeDate() ? "&date=" + self.filterGradeDate()   : "";
-    let selectedGradeDateCompare =
-        self.selectedGradeDateCompare() ? "&dateCompare=" + self.selectedGradeDateCompare() : "";
-    let gradeValue = self.filterGradeValue() ? "&value=" + self.filterGradeValue()   : "";
-    let selectedGradeValueCompare =
-        self.selectedGradeValueCompare() ? "&valueCompare=" + self.selectedGradeValueCompare() : "";
+    let courseId = self.selectedCourseId()
+      ? "course=" + self.selectedCourseId()
+      : "";
+    let gradeDate = self.filterGradeDate()
+      ? "&date=" + self.filterGradeDate()
+      : "";
+    let selectedGradeDateCompare = self.selectedGradeDateCompare()
+      ? "&dateCompare=" + self.selectedGradeDateCompare()
+      : "";
+    let gradeValue = self.filterGradeValue()
+      ? "&value=" + self.filterGradeValue()
+      : "";
+    let selectedGradeValueCompare = self.selectedGradeValueCompare()
+      ? "&valueCompare=" + self.selectedGradeValueCompare()
+      : "";
 
-    url += courseId + gradeDate + selectedGradeDateCompare + gradeValue + selectedGradeValueCompare;
+    url +=
+      courseId +
+      gradeDate +
+      selectedGradeDateCompare +
+      gradeValue +
+      selectedGradeValueCompare;
 
     getData(url).then((data) => {
       self.grades.removeAll();
       data.forEach((grade) => {
-          self.grades.push(ko.mapping.fromJS(grade));
+        self.grades.push(ko.mapping.fromJS(grade));
       });
     });
   }
-  self.selectedCourseId.subscribe(function(id){
+  self.selectedCourseId.subscribe(function (id) {
     console.log(id);
     filterCourseInGrade();
-  })
+  });
 
-    self.filterGradeDate.subscribe(function() {
-        filterCourseInGrade();
+  self.filterGradeDate.subscribe(function () {
+    filterCourseInGrade();
+  });
+  self.filterGradeDate.extend({ rateLimit: 500 });
 
-    });
-    self.filterGradeDate.extend({ rateLimit: 500 });
+  self.selectedGradeDateCompare.subscribe(function () {
+    filterCourseInGrade();
+  });
 
-    self.selectedGradeDateCompare.subscribe(function(){
-          filterCourseInGrade();
+  self.filterGradeValue.subscribe(function () {
+    filterCourseInGrade();
+  });
+  self.filterGradeValue.extend({ rateLimit: 100 });
 
-    });
-
-    self.filterGradeValue.subscribe(function() {
-        filterCourseInGrade();
-
-    });
-    self.filterGradeValue.extend({ rateLimit: 100 });
-
-    self.selectedGradeValueCompare.subscribe(function(){
-          filterCourseInGrade();
-
-    });
+  self.selectedGradeValueCompare.subscribe(function () {
+    filterCourseInGrade();
+  });
 
   function filterCourse() {
-    let course = self.filterCourseName() ? "name=" + self.filterCourseName() : "";
-    let lecturer = self.filterCourseLecturer() ? "&lecturer=" + self.filterCourseLecturer() : "";
+    let course = self.filterCourseName()
+      ? "name=" + self.filterCourseName()
+      : "";
+    let lecturer = self.filterCourseLecturer()
+      ? "&lecturer=" + self.filterCourseLecturer()
+      : "";
 
     let url = "http://localhost:1234/courses?" + course + lecturer;
 
@@ -173,45 +188,57 @@ function viewModel() {
   }
 
   function filterStudent() {
-      let firstName = self.filterFirstName() ? "firstName=" + self.filterFirstName() : "";
-      let lastName  = self.filterLastName()  ? "&lastName="  + self.filterLastName() : "";
-      let birthday  = self.filterBirthday() ? "&birthday=" + self.filterBirthday()   : "";
-      let selectedBirthdayCompare =
-          self.selectedBirthdayCompare() ? "&birthdayCompare=" + self.selectedBirthdayCompare() : "";
+    let firstName = self.filterFirstName()
+      ? "firstName=" + self.filterFirstName()
+      : "";
+    let lastName = self.filterLastName()
+      ? "&lastName=" + self.filterLastName()
+      : "";
+    let birthday = self.filterBirthday()
+      ? "&birthday=" + self.filterBirthday()
+      : "";
+    let selectedBirthdayCompare = self.selectedBirthdayCompare()
+      ? "&birthdayCompare=" + self.selectedBirthdayCompare()
+      : "";
 
-      let url = "http://localhost:1234/students?" + firstName + lastName + birthday + selectedBirthdayCompare;
+    let url =
+      "http://localhost:1234/students?" +
+      firstName +
+      lastName +
+      birthday +
+      selectedBirthdayCompare;
 
-      getData(url).then((data) => {
-        self.students.removeAll();
-        data.forEach((student) => {
-          self.students.push(ko.mapping.fromJS(student));
-        });
+    getData(url).then((data) => {
+      self.students.removeAll();
+      data.forEach((student) => {
+        self.students.push(ko.mapping.fromJS(student));
       });
+    });
   }
 
-  self.filterCourseName.subscribe(function(){
+  self.filterCourseName.subscribe(function () {
     filterCourse();
   });
 
-  self.filterCourseLecturer.subscribe(function(){
-    filterCourse()
+  self.filterCourseLecturer.subscribe(function () {
+    filterCourse();
   });
 
-  self.filterFirstName.subscribe(function(){
+  self.filterFirstName.subscribe(function () {
     filterStudent();
   });
 
-  self.filterLastName.subscribe(function(){
+  self.filterLastName.subscribe(function () {
     filterStudent();
   });
 
-  self.filterBirthday.subscribe(function() {
+  self.filterBirthday.subscribe(function () {
     filterStudent();
   });
   self.filterBirthday.extend({ rateLimit: 500 });
 
-  self.selectedBirthdayCompare.subscribe(function(){
-    filterStudent()
+  self.selectedBirthdayCompare.subscribe(function () {
+    filterStudent();
   });
 
   self.coursesSub = new Map();
